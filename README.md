@@ -11,5 +11,8 @@ us to avoid copy/paste terraform code and keep configurations DRY
 
 ## Directories
 
-- [live](live)
+- [live](live)  Here, you can define multiples environment as you want, each environment is going to have sub folders
+                each subfolder represents a module that the environment needs.
+                inside a module will there a terragrunt.hcl
+
 - [modules](modules)
