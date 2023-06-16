@@ -4,7 +4,8 @@
 *.tfstate.backup
 
 # Terragrunt
-.terragrunt-cache
+dev/ec2-instance/.terragrunt-cache
+dev/vpc/.terragrunt-cache
 
 # OS X
 .history
