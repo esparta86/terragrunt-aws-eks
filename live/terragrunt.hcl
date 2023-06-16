@@ -1,7 +1,6 @@
 
 
 locals {
-
   parsed =  regex(".*/live/(?P<env>.*?)/.*", get_terragrunt_dir())
   env = local.parsed.env
 
