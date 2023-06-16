@@ -26,6 +26,6 @@ us to avoid copy/paste terraform code and keep configurations DRY
 
 2. Go to live/dev/vpc and execute the terragrunt code
 
- ` $ terragrunt init `
- ` $ terragrunt plan `
- ` $ terragrunt  apply `
+ - ` $ terragrunt init `
+ - ` $ terragrunt plan `
+ - ` $ terragrunt  apply `
