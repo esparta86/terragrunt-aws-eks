@@ -107,12 +107,7 @@ resource "aws_security_group" "security_group" {
 
 ######################  MYSQL SERVER #########################
 
-resource "aws_eip" "ip_nat" {
-  vpc = true
-  tags = merge(var.default_tags,{
-    "Name" = "elasticIpNat"
-  })
-}
+
 
 
 #Create a private subnet
@@ -127,6 +122,13 @@ resource "aws_subnet" "private_subnet" {
 }
 
 
+resource "aws_eip" "ip_nat" {
+  vpc = true
+  tags = merge(var.default_tags,{
+    "Name" = "elasticIpNat"
+  })
+}
+
 #Creating the NAT gateway using the subnet id and allocation id
 # Review the sample https://aws.amazon.com/premiumsupport/knowledge-center/nat-gateway-vpc-private-subnet/
 # IMPORTANT!
@@ -135,31 +137,69 @@ resource "aws_subnet" "private_subnet" {
 # - Provision an unattached Elastic IP address (EIP)
 # - You need to update the route table of the private subnet hosting the EC2 instances that need internet access
 
-# resource "aws_nat_gateway" "nat_gateway" {
-#   allocation_id = aws_eip.ip_nat.id
-#   subnet_id = element(aws_subnet.public_subnet.*.id,0)
-#   tags = merge(var.default_tags,{
-#     "Name" = "natGateway"
-#   })
+resource "aws_nat_gateway" "nat_gateway" {
+  allocation_id = aws_eip.ip_nat.id
+  subnet_id = element(aws_subnet.public_subnet.*.id,0)
+  tags = merge(var.default_tags,{
+    "Name" = "natGateway"
+  })
 
-# }
+  depends_on = [ aws_eip.ip_nat ]
+
+}
 
 
 
 #Route table for private subnets
 # @default_tags contains default tags to inject into resources
-# resource "aws_route_table" "private_rt" {
-#   vpc_id = aws_vpc.main_vpc.id
-#   route  {
-#     cidr_block = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.nat_gateway.id
-#   }
-# }
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.main_vpc.id
+  route  {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gateway.id
+  }
+}
 
 
 
+#Route table Association with private Subnets
+resource "aws_route_table_association" "private_rt_association" {
+  subnet_id = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.private_rt.id
+}
 
-# resource "aws_route_table_association" "private_rt_association" {
-#   subnet_id = aws_subnet.private_subnet.id
-#   route_table_id = aws_route_table.private_rt.id
-# }
+
+
+resource "aws_security_group" "sg_mysql" {
+  depends_on = [ aws_vpc.main_vpc ]
+
+  name = "sg for mysql servers"
+  description = "Allow mysql inbound traffic"
+
+  vpc_id = aws_vpc.main_vpc.id
+
+  ingress {
+    description = "allow tcp"
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    security_groups = [ aws_security_group.security_group.id ]
+  }
+
+  ingress {
+    description = "allow ssh"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    security_groups = [ aws_security_group.security_group.id]
+
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
+
+}

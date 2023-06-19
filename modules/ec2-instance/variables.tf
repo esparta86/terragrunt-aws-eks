@@ -18,3 +18,19 @@ variable "security_group_nginx_id" {
   type = string
   description = "security group id,created in vpc module"
 }
+
+variable "instance_name_mysql" {
+  type = string
+  description = "Instance name of mysql server"
+}
+
+
+variable "security_group_mysql_id" {
+  type = string
+  description = "security group id"
+}
+
+variable "subnet_private_id" {
+  type = string
+  description = "subnet id private "
+}

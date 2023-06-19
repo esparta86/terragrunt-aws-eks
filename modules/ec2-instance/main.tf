@@ -29,3 +29,20 @@ resource "aws_eip" "public_ip_servers" {
 
 
 }
+
+
+resource "aws_instance" "mysql_server" {
+  ami = "ami-0631713b28ac842f0"
+  instance_type = var.instance_type
+
+  vpc_security_group_ids = [ var.security_group_mysql_id ]
+  user_data = file("${path.module}/user-data/setup-mysql.sh")
+
+  subnet_id = var.subnet_private_id
+  tags ={
+    Name = var.instance_name_mysql
+  }
+
+  key_name = "ubuntu"
+}
+

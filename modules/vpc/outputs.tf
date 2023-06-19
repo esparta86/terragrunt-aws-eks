@@ -11,3 +11,11 @@ output "subnets_public_ids" {
 output "security_group_ngix_id" {
   value = aws_security_group.security_group.id
 }
+
+output "security_group_mysql_id" {
+  value = aws_security_group.sg_mysql.id
+}
+
+output "subnet_private_id" {
+  value = aws_subnet.private_subnet.id
+}
