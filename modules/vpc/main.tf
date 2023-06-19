@@ -1,3 +1,4 @@
+##  The following resources are created to work with ec2-instance module ##
 resource "aws_vpc" "main_vpc" {
   cidr_block = var.vpc_cidr
 
