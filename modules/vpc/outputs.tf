@@ -6,3 +6,8 @@ output "vpc_id" {
 output "subnets_public_ids" {
   value = aws_subnet.public_subnet[*].id
 }
+
+
+output "security_group_ngix_id" {
+  value = aws_security_group.security_group.id
+}

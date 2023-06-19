@@ -5,9 +5,10 @@ terraform {
 }
 
 inputs = {
-    instance_type = "t2.micro"
-    instance_name = "example-server-dev"
+    instance_type = "t2.medium"
+    instance_name = "nginx-server"
     subnet_public_list = dependency.vpc.outputs.subnets_public_ids
+    security_group_nginx_id = dependency.vpc.outputs.security_group_ngix_id
 }
 
 
