@@ -4,6 +4,6 @@ output "data_subnets_private_id" {
 }
 
 
-output "output_zonenames" {
-  value = local.zone_list
-}
+# output "output_zonenames" {
+#   value = local.zone_list
+# }

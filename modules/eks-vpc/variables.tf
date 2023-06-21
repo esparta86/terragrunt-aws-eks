@@ -17,3 +17,7 @@ variable "default_tags" {
 }
 
 
+variable "cluster_deployment_name" {
+  type = string
+  default = "eks_deployment01"
+}
