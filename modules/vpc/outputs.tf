@@ -19,3 +19,4 @@ output "security_group_mysql_id" {
 output "subnet_private_id" {
   value = aws_subnet.private_subnet.id
 }
+
