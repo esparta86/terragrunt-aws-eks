@@ -63,7 +63,7 @@ resource "aws_subnet" "eks_public_subnet" {
 
   tags = merge(var.default_tags, {
     "Name"                            = "eks-public-subnet-${count.index}-${element(data.aws_availability_zones.available_zones.names, count.index)}"
-    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/role/elb" = "1"
     "kubernetes.io/cluster/demo"      = "owned"
     "tier"                            = "Public"
     "eks"                             = "deployment"
