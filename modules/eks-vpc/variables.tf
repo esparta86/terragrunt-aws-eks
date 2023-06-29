@@ -36,3 +36,9 @@ variable "instance_types_workers_eks" {
   default = "t2.medium"
   description = "Instance type of VM that are going to work as workers"
 }
+
+
+variable "AWS_ACCOUNT_ID" {
+  type = string
+
+}
