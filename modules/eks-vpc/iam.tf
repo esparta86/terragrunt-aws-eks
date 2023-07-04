@@ -63,7 +63,9 @@ resource "aws_iam_role_policy_attachment" "nodes-policies" {
   for_each = { for p in [
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"  #To attach the necessary policy to the IAM role for your worker nodes
+    # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-prerequisites.html
   ] : p => p }
 
   policy_arn = each.key

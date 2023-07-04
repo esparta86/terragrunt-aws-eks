@@ -40,3 +40,26 @@ NAME                         STATUS   ROLES    AGE   VERSION
 ip-10-0-1-173.ec2.internal   Ready    <none>   26m   v1.25.9-eks-0a21954
 ip-10-0-2-115.ec2.internal   Ready    <none>   25m   v1.25.9-eks-0a21954
 `
+
+
+## Setup Container Insights EKS
+
+By default EKS doesn't perform the configuration to collect logs
+from de apps and send it to CloudWatch
+You can read this aws documentation https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-logs-FluentBit.html#Container-Insights-FluentBit-setup to know more about how
+it works.
+
+In our eks-vpc module, I created the following resource to achieve this.
+
+| RESOURCE AWS                          | Description |
+| -------------                         | ------------- |
+|  aws_iam_role -> iam-role-fluent-bit  | creates an IAM role with a trust policy that allows the Fluent Bit service in an EKS cluster to assume the role based on specific conditions defined in the OIDC token. This role can be used to grant necessary permissions to Fluent Bit for performing its tasks within the EKS cluster.                 |
+| aws_iam_policy -> policy_sa_logs | policy in aws that is going to use by the previous role in order to have permisssions to send logs to CloudWatch  |
+
+
+
+1. Go to enabling-cloudwatch directory
+   You will find a yaml file that has some resources that is going to install into EKS
+   there are 2 service accounts
+   one of these is going to use a role defined in Terraform
+

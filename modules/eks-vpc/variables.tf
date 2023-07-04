@@ -38,7 +38,22 @@ variable "instance_types_workers_eks" {
 }
 
 
-variable "AWS_ACCOUNT_ID" {
-  type = string
+# variable "AWS_ACCOUNT_ID" {
+#   type = string
 
+# }
+
+variable "region" {
+  type = string
+  description = "region"
+}
+
+variable "cloudwatch_namespace" {
+  type = string
+  description = "namespace"
+}
+
+variable "eks-service_account-name" {
+  type = string
+  description = "service account name"
 }
