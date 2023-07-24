@@ -23,7 +23,7 @@ resource "aws_subnet" "eks_private_subnet" {
     "eks"                             = "deployment"
   })
 
-  depends_on = [ aws_vpc.eks_vpc, data.aws_availability_zones.available_zones]
+  depends_on = [ aws_vpc.vpc ]
 }
 
 
