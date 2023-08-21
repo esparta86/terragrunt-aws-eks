@@ -62,3 +62,26 @@
 #     values =  var.redis_availability_zones_second
 #   }
 # }
+
+# data "aws_availability_zones" "all" {}
+# data "aws_ec2_instance_type_offering" "example" {
+#   for_each = toset(data.aws_availability_zones.all.names)
+
+#   filter {
+#     name   = "instance-type"
+#     values = ["cache.t3.small", "cache.t2.small"]
+#   }
+
+#   filter {
+#     name   = "location"
+#     values = [each.value]
+#   }
+
+#   location_type = "availability-zone"
+
+#   preferred_instance_types = ["cache.t3.small", "cache.t2.small"]
+# }
+
+# output "foo" {
+#   value = { for az, details in data.aws_ec2_instance_type_offering.example : az => details.instance_type }
+# }

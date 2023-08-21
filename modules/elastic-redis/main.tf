@@ -13,17 +13,34 @@ resource "aws_elasticache_replication_group" "this" {
   apply_immediately          = true
   num_node_groups            = var.cluster_mode_enabled ? var.redis_num_node_groups : null
   replicas_per_node_group    = var.cluster_mode_enabled ? var.redis_replicas : null
+
+  preferred_cache_cluster_azs = ["us-east-1a","us-east-1d"]
   timeouts {
     create = "2h"
     update = "2h"
     delete = "2h"
   }
+
+  # lifecycle {
+  #   replace_triggered_by = [
+  #     aws_elasticache_subnet_group.this.id, //Replace `azurerm_app_service` each time `azurerm_sql_database` id changes
+  #   ]
+  # }
+
+   lifecycle {
+    create_before_destroy = true
+     replace_triggered_by = [
+      aws_elasticache_subnet_group.this.id
+    ]
+  }
+
 }
 
 resource "aws_elasticache_subnet_group" "this" {
   name       = "${var.environment}-${var.redis_name}"
   subnet_ids =  data.aws_subnets.list_private_subnets_redis.ids
   tags       = var.tags
+
 }
 
 resource "aws_elasticache_parameter_group" "this" {

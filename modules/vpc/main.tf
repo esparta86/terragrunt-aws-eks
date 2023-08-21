@@ -56,6 +56,7 @@ resource "aws_subnet" "public_subnet" {
 
    tags = {
      "Name" = "subnet-${count.index}-public"
+     "scope" = "public"
    }
 
 }
@@ -119,7 +120,7 @@ resource "aws_security_group" "security_group" {
 resource "aws_subnet" "private_subnet" {
   vpc_id = aws_vpc.main_vpc.id
   cidr_block = var.private_subnet_cidr
-  tags_all = merge({"Name"= "private-subnet"},var.default_tags,var.private_subnet_tags)
+  tags = merge({"Name"= "private-subnet"},var.default_tags,var.private_subnet_tags)
 }
 
 

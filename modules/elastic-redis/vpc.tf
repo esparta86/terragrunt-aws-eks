@@ -71,32 +71,32 @@ data "aws_subnets" "list_private_subnets_redis" {
 }
 
 
-data "aws_subnets" "list_private_subnets_redis_second" {
-  depends_on = [
-    aws_vpc.vpc, aws_subnet.private_subnets
-  ]
+# data "aws_subnets" "list_private_subnets_redis_second" {
+#   depends_on = [
+#     aws_vpc.vpc, aws_subnet.private_subnets
+#   ]
 
-  filter {
-    name   = "vpc-id"
-    values = [aws_vpc.vpc.id]
-  }
+#   filter {
+#     name   = "vpc-id"
+#     values = [aws_vpc.vpc.id]
+#   }
 
-  filter {
-    name   = "tag:purpose"
-    values = ["Redis"]
-  }
+#   filter {
+#     name   = "tag:purpose"
+#     values = ["Redis"]
+#   }
 
-  filter {
-    name   = "tag:tier"
-    values = ["Private"]
-  }
+#   filter {
+#     name   = "tag:tier"
+#     values = ["Private"]
+#   }
 
-  filter {
-    name = "availability-zone"
-    values = var.redis_availability_zones_second
-  }
+#   filter {
+#     name = "availability-zone"
+#     values = var.redis_availability_zones_second
+#   }
 
-  # tags = {
-  #   "eks" = "deployment"
-  # }
-}
+#   # tags = {
+#   #   "eks" = "deployment"
+#   # }
+# }
