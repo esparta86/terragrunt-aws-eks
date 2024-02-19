@@ -9,6 +9,7 @@ live/dev/ec2-instance/.terragrunt-cache
 live/dev/vpc/.terragrunt-cache
 live/dev/eks-vpc/.terragrunt-cache
 live/dev/elastic-redis/.terragrunt-cache
+live/dev/aws-vpc-module/.terragrunt-cache
 
 # OS X
 .history

@@ -1,16 +1,42 @@
 variable "vpc_cidr" {
   description = "cidr for vpc"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "10.2.0.0/16"
 }
 
+
+variable "vpc_cidr2" {
+  description = "cidr for vpc"
+  type        = string
+  default     = "10.3.0.0/16"
+}
 
 variable "private_subnet_cidr" {
   description = "cidr for subnet vpc"
   type        = string
-  default     = "10.0.0.64/26"
+  default     = "10.2.0.64/26"
 }
 
+
+variable "private_subnet_cidr2" {
+  description = "cidr for subnet vpc"
+  type        = string
+  default     = "10.2.0.128/26"
+}
+
+
+variable "private_subnet_cidr3" {
+  description = "cidr for subnet vpc"
+  type        = string
+  default     = "10.3.0.64/26"
+}
+
+
+variable "private_subnet_cidr4" {
+  description = "cidr for subnet vpc"
+  type        = string
+  default     = "10.3.0.128/26"
+}
 
 variable "default_tags" {
   default = {
@@ -43,8 +69,13 @@ variable "azs" {
   description = "The availability zones to spread nodes in"
   default = [
     "us-east-1a",
-    "us-east-1b",
-    "us-east-1c"
+    # "us-east-1b",
+    # "us-east-1c"
     ]
   type = list(string)
+}
+
+variable "create_sg_mysql" {
+  type = bool
+  default = true
 }

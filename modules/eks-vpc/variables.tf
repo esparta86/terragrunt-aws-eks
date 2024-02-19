@@ -9,6 +9,8 @@ variable "default_tags" {
   default = {
     cloudprovider = "aws"
     owner         = "devops-team"
+    # djjdjd
+    # remove
     Terraform     = "true"
     Environment   = "Development"
   }
@@ -31,7 +33,7 @@ variable "create_node_security_group" {
 
 
 variable "version_eks_deployment" {
-  default     = "1.25"
+  default     = "1.24"
   description = "version cluster"
   type        = string
 }

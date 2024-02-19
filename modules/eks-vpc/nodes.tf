@@ -49,24 +49,24 @@ resource "aws_eks_node_group" "private-nodes" {
 }
 
 resource "aws_launch_template" "default" {
-  name_prefix = "eks-launch-template-2"
+  name_prefix = "eks-launch-template"
   instance_type =  var.instance_types_workers_eks
   key_name = "ubuntu"
   # vpc_security_group_ids = [ aws_security_group.allow-ssh.id ]
-  user_data = base64encode(<<-EOF
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
+#   user_data = base64encode(<<-EOF
+# MIME-Version: 1.0
+# Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
 
---==MYBOUNDARY==
-Content-Type: text/x-shellscript; charset="us-ascii"
+# --==MYBOUNDARY==
+# Content-Type: text/x-shellscript; charset="us-ascii"
 
-#!/bin/bash
-/etc/eks/bootstrap.sh eks_colocho86 --kubelet-extra-args='--cluster-dns=169.254.20.10 --node-labels=kubelet=mykubelet2023'
-echo "APPLYING CHANGES ................................................ KUBECTL"
---==MYBOUNDARY==--\
+# #!/bin/bash
+# /etc/eks/bootstrap.sh eks_colocho86 --kubelet-extra-args='--cluster-dns=169.254.20.10 --node-labels=kubelet=mykubelet2023'
+# echo "APPLYING CHANGES ................................................ KUBECTL"
+# --==MYBOUNDARY==--\
 
-    EOF
-    )
+#     EOF
+    # )
 lifecycle {
     create_before_destroy = true
   }

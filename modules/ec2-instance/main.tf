@@ -9,7 +9,7 @@ resource "aws_instance" "app_server_nginx" {
 
   user_data              = file("${path.module}/user-data/setup-nginx.sh")
 
-
+   key_name = "ubuntu"
   tags = {
     Name = "${var.instance_name}-${count.index}"
   }
@@ -22,6 +22,7 @@ resource "aws_eip" "public_ip_servers" {
   count = length(var.subnet_public_list)
   vpc = true
   instance = element(aws_instance.app_server_nginx.*.id,count.index)
+
 
   tags = {
     "Name" = "public-ip-nginx-server-${count.index}"

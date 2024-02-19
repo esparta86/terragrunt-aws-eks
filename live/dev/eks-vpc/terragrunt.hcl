@@ -12,7 +12,7 @@ inputs = {
     eks-service_account-name = "fluent-bit"
     default_tags =  {
        cloudprovider = "aws"
-       owner         = "lisandro"
+    #    owner         = "lisandro"
        environment   =  "dev"
        purpose       =  "eks cluster"
     }
