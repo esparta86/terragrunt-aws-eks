@@ -5,7 +5,7 @@ terraform {
     dynamodb_table = "terraform-locks"
     encrypt        = true
     key            = "dev/test/terraform.tfstate"
-    profile        = "personal"
+    profile        = "personal-1973"
     region         = "us-east-1"
   }
 }

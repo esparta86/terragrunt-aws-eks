@@ -1,0 +1,263 @@
+USER-SUPPLIED VALUES:
+connectors:
+  affinity: {}
+  enabled: true
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-connectors-bundle
+    tag: 8.5.0
+  inbound:
+    auth:
+      existingSecret: ""
+    mode: oauth
+  logging:
+    level:
+      io.camunda.connector: ERROR
+  nodeSelector: {}
+  replicas: 1
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 1
+      memory: 1Gi
+  service:
+    serverName: http
+    serverPort: 8080
+    type: ClusterIP
+elasticsearch:
+  enabled: true
+  image:
+    registry: 972525491246.dkr.ecr.us-east-1.amazonaws.com
+    repository: elasticsearch
+    resources:
+      limits:
+        cpu: 2
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 2Gi
+    tag: 8.12.2
+global:
+  annotations: {}
+  identity:
+    auth:
+      enabled: true
+      operate:
+        redirectUrl: https://fact-devops-dev-use1-1.nonprd.pluto.tv/operate
+      optimize:
+        redirectUrl: https://fact-devops-dev-use1-1.nonprd.pluto.tv/optimize
+      publicIssuerUrl: https://fact-devops-dev-use1-1.nonprd.pluto.tv/auth/realms/camunda-platform
+      tasklist:
+        redirectUrl: https://fact-devops-dev-use1-1.nonprd.pluto.tv/tasklist
+      webModeler:
+        redirectUrl: https://fact-devops-dev-use1-1.nonprd.pluto.tv/modeler
+  image:
+    tag: 8.5.0
+  labels:
+    app: camunda-platform
+  zeebeClusterName: '{{ .Release.Name }}-zeebe'
+  zeebePort: 26500
+identity:
+  affinity: {}
+  contextPath: /identity
+  enabled: true
+  firstUser:
+    email: demo@example.org
+    enabled: true
+    existingSecret: ""
+    firstName: Demo
+    lastName: User
+    password: demo
+    username: demo
+  fullURL: https://fact-devops-dev-use1-1.nonprd.pluto.tv/identity
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-identity
+    tag: 8.5.0
+  keycloak:
+    auth:
+      adminUser: admin
+    enabled: true
+    image:
+      registry: 972525491246.dkr.ecr.us-east-1.amazonaws.com
+      repository: keycloak
+      tag: 23.0.7
+    postgresql:
+      image:
+        registry: 972525491246.dkr.ecr.us-east-1.amazonaws.com
+        repository: postgresql
+        tag: 15.6.0
+    service:
+      type: ClusterIP
+  nodeSelector: {}
+  postgresql:
+    auth:
+      database: identity
+      existingSecret: ""
+      password: null
+      username: identity
+    enabled: false
+    externalDatabase:
+      database: null
+      enabled: false
+      existingSecret: null
+      existingSecretPasswordKey: null
+      host: null
+      password: null
+      port: null
+      username: null
+    image:
+      repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/postgresql
+      tag: 15.6.0
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 600m
+      memory: 400Mi
+  service:
+    metricsName: metrics
+    metricsPort: 82
+    port: 80
+    type: ClusterIP
+operate:
+  affinity: {}
+  contextPath: /operate
+  enabled: true
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-operate
+    tag: 8.5.0
+  logging:
+    level:
+      ROOT: INFO
+      io.camunda.operate: INFO
+  nodeSelector: {}
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 600m
+      memory: 400Mi
+  service:
+    port: 80
+    type: ClusterIP
+optimize:
+  affinity: {}
+  contextPath: /optimize
+  enabled: true
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-optimize
+    tag: 8.5.0
+  nodeSelector: {}
+  partitionCount: "3"
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 600m
+      memory: 1Gi
+  service:
+    managementPort: 8092
+    port: 80
+    type: ClusterIP
+tasklist:
+  affinity: {}
+  contextPath: /tasklist
+  enabled: true
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-tasklist
+    tag: 8.5.0
+  nodeSelector: {}
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 400m
+      memory: 1Gi
+  service:
+    port: 80
+    type: ClusterIP
+zeebe:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/component
+            operator: In
+            values:
+            - zeebe-broker
+        topologyKey: kubernetes.io/hostname
+  clusterSize: "3"
+  debug: false
+  enabled: true
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-zeebe
+    tag: 8.5.0
+  logLevel: info
+  nodeSelector: {}
+  partitionCount: "3"
+  persistenceType: disk
+  pvcAccessModes:
+  - ReadWriteOnce
+  pvcSize: 32Gi
+  pvcStorageClassName: ""
+  replicationFactor: "3"
+  resources:
+    limits:
+      cpu: 960m
+      memory: 1920Mi
+    requests:
+      cpu: 800m
+      memory: 1200Mi
+  service:
+    commandName: command
+    commandPort: 26501
+    httpName: http
+    httpPort: 9600
+    internalName: internal
+    internalPort: 26502
+    type: ClusterIP
+zeebe-gateway:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/component
+            operator: In
+            values:
+            - zeebe-gateway
+        topologyKey: kubernetes.io/hostname
+  env:
+  - name: ZEEBE_GATEWAY_SECURITY_AUTHENTICATION_IDENTITY_ISSUERBACKENDURL
+    value: http://{{ .Release.Name }}-keycloak:80/auth/realms/camunda-platform
+  - name: ZEEBE_GATEWAY_SECURITY_AUTHENTICATION_IDENTITY_AUDIENCE
+    value: zeebe-api
+  - name: ZEEBE_GATEWAY_SECURITY_AUTHENTICATION_IDENTITY_TYPE
+    value: keycloak
+  image:
+    repository: 972525491246.dkr.ecr.us-east-1.amazonaws.com/camunda-zeebe
+    tag: 8.5.0
+  logLevel: info
+  nodeSelector: {}
+  replicas: 2
+  resources:
+    limits:
+      cpu: 400m
+      memory: 450Mi
+    requests:
+      cpu: 400m
+      memory: 450Mi
+  service:
+    gatewayName: grpc
+    gatewayPort: 26500
+    httpName: http
+    httpPort: 9600
+    internalName: internal
+    internalPort: 26502
+    type: ClusterIP

@@ -1,0 +1,66 @@
+image:
+  repository: registry.k8s.io/dns/k8s-dns-node-cache
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+config:
+  # Internal k8s DNS domain
+  dnsDomain: "cluster.local"
+
+  # Main coredns service (kube-dns) ip, used on iptables-mode.
+  dnsServer: "172.20.0.10"
+
+  # Virtual IP to be used by ipvs mode, to be used as --cluster-dns, must not collide.
+  localDns: "169.254.20.10"
+
+  # Set communication protocol. Options are `prefer_udp` or `force_tcp`
+  commProtocol: "prefer_udp"
+
+  # Port used for the health endpoint
+  healthPort: 8080
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created.
+  create: true
+  # Annotations to add to the service account.
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template.
+  name: ""
+
+podAnnotations: {}
+
+securityContext:
+  capabilities:
+    add:
+    - NET_ADMIN
+
+# https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
+serviceMonitor:
+  # Ensure that servicemonitor is created, this will disable prometheus annotations
+  enabled: false
+  labels: {}
+
+# https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md
+dashboard:
+  enabled: false
+  # namespace where grafana sidecar is configured to look for dashboards. e.g. "monitoring"
+  namespace: kube-system
+  # label that grafana sidecar is configured to look for
+  label: grafana_dashboard
+  annotations: {}
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 128Mi
+  limits:
+    memory: 128Mi
+
+affinity: {}
+
+imagePullSecrets: []
+# - name: "image-pull-secret"

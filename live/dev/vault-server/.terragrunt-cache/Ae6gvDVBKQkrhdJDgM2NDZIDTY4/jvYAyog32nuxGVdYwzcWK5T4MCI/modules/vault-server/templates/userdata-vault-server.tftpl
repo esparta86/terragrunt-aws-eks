@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+set -x
+exec > >(tee /var/log/tf-user-data.log|logger -t user-data ) 2>&1
+
+logger() {
+  DT=$(date '+%Y/%m/%d %H:%M:%S')
+  echo "$DT $0: $1"
+}
+
+logger "Running"
+
+##--------------------------------------------------------------------
+## Variables
+
+# Get Private IP address
+#HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/hostname)
+PRIVATE_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+#PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+
+AWS_REGION="${tpl_aws_region}"
+KMS_KEY="${tpl_kms_key}"
+CONSUL_BOOSTRAP_EXPECT="${tpl_consul_bootstrap_expect}"
+
+# Detect package management system.
+YUM=$(which yum 2>/dev/null)
+APT_GET=$(which apt-get 2>/dev/null)
+
+##--------------------------------------------------------------------
+## Functions
+
+user_rhel() {
+  # RHEL/CentOS user setup
+  sudo /usr/sbin/groupadd --force --system $${USER_GROUP}
+
+  if ! getent passwd $${USER_NAME} >/dev/null ; then
+    sudo /usr/sbin/adduser \
+      --system \
+      --gid $${USER_GROUP} \
+      --home $${USER_HOME} \
+      --no-create-home \
+      --comment "$${USER_COMMENT}" \
+      --shell /bin/false \
+      $${USER_NAME}  >/dev/null
+  fi
+}
+
+user_ubuntu() {
+  # UBUNTU user setup
+  if ! getent group $${USER_GROUP} >/dev/null
+  then
+    sudo addgroup --system $${USER_GROUP} >/dev/null
+  fi
+
+  if ! getent passwd $${USER_NAME} >/dev/null
+  then
+    sudo adduser \
+      --system \
+      --disabled-login \
+      --ingroup $${USER_GROUP} \
+      --home $${USER_HOME} \
+      --no-create-home \
+      --gecos "$${USER_COMMENT}" \
+      --shell /bin/false \
+      $${USER_NAME}  >/dev/null
+  fi
+}
+
+##--------------------------------------------------------------------
+## Install Base Prerequisites
+
+logger "Setting timezone to UTC"
+sudo timedatectl set-timezone UTC
+
+if [[ ! -z $${YUM} ]]; then
+  logger "RHEL/CentOS system detected"
+  logger "Performing updates and installing prerequisites"
+  sudo yum-config-manager --enable rhui-REGION-rhel-server-releases-optional
+  sudo yum-config-manager --enable rhui-REGION-rhel-server-supplementary
+  sudo yum-config-manager --enable rhui-REGION-rhel-server-extras
+  sudo yum -y check-update
+  sudo yum install -q -y wget unzip bind-utils ruby rubygems ntp jq
+  sudo systemctl start ntpd.service
+  sudo systemctl enable ntpd.service
+elif [[ ! -z $${APT_GET} ]]; then
+  logger "Debian/Ubuntu system detected"
+  logger "Performing updates and installing prerequisites"
+  sudo apt-get -qq -y update
+  sudo apt-get install -qq -y wget unzip dnsutils ruby rubygems ntp jq
+  sudo systemctl start ntp.service
+  sudo systemctl enable ntp.service
+  logger "Disable reverse dns lookup in SSH"
+  sudo sh -c 'echo "\nUseDNS no" >> /etc/ssh/sshd_config'
+  sudo service ssh restart
+else
+  logger "Prerequisites not installed due to OS detection failure"
+  exit 1;
+fi
+
+##--------------------------------------------------------------------
+## Install AWS-Specific Prerequisites
+
+if [[ ! -z $${YUM} ]]; then
+  logger "RHEL/CentOS system detected"
+  logger "Performing updates and installing prerequisites"
+  curl --silent -O https://bootstrap.pypa.io/get-pip.py
+  sudo python get-pip.py
+  sudo pip install awscli
+elif [[ ! -z $${APT_GET} ]]; then
+  logger "Debian/Ubuntu system detected"
+  logger "Performing updates and installing prerequisites"
+  sudo apt-get -qq -y update
+  sudo apt-get install -qq -y awscli
+else
+  logger "AWS Prerequisites not installed due to OS detection failure"
+  exit 1;
+fi
+
+##--------------------------------------------------------------------
+## Install Vault
+
+if [[ ! -z $${YUM} ]]; then
+  logger "RHEL/CentOS system detected"
+  logger "Performing updates and installing prerequisites"
+  curl --silent -O https://bootstrap.pypa.io/get-pip.py
+  sudo python get-pip.py
+  sudo pip install awscli
+  logger "Installing Vault"
+  sudo yum install -y yum-utils
+  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+  sudo yum -y install vault
+  
+
+elif [[ ! -z $${APT_GET} ]]; then
+  logger "Debian/Ubuntu system detected"
+  logger "Performing updates and installing prerequisites"
+  sudo apt-get -qq -y update
+  sudo apt-get install -qq -y awscli
+  logger "Installing Vault"
+  wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+  sudo apt update && sudo apt install vault
+
+else
+  logger "Vault not installed due to OS detection failure"
+  exit 1;
+fi
+
+##--------------------------------------------------------------------
+## Configure Vault server
+
+logger "/usr/local/bin/vault --version: $(/usr/local/bin/vault --version)"
+
+logger "Configuring Vault"
+
+sudo cp /etc/vault.d/vault.hcl /etc/vault.d/vault.hcl.orig
+
+# Overwrite default configuration with custom configuration
+sudo tee /etc/vault.d/vault.hcl <<EOF
+api_addr = "http://$${PRIVATE_IP}:8200"
+cluster_addr = "http://$${PRIVATE_IP}:8201"
+ui=true
+
+storage "raft" {
+    service = "${tpl_vault_service_name}"
+    node_id = "learn-vault-server-1"
+    path = "/opt/vault/data"
+}
+
+listener "tcp" {
+  address     = "$${PRIVATE_IP}:8200"
+  #address     = "0.0.0.0:8200"
+  tls_disable = 1
+}
+
+seal "awskms" {
+  region = "$${AWS_REGION}"
+  kms_key_id = "$${KMS_KEY}"
+}
+
+EOF
+
+sudo chmod -R 0644 /etc/vault.d/*
+
+##--------------------------------------------------------------------
+## Global Vault default client configuration
+sudo tee -a /etc/environment <<EOF
+export VAULT_ADDR=http://$${PRIVATE_IP}:8200
+export VAULT_SKIP_VERIFY=true
+EOF
+
+source /etc/environment
+
+##--------------------------------------------------------------------
+## Ensure mlock capability on binary
+logger "Granting mlock syscall to vault binary"
+sudo setcap cap_ipc_lock=+ep /usr/bin/vault
+
+##--------------------------------------------------------------------
+## Enable and start Vault
+sudo systemctl enable vault
+sudo systemctl start vault
+
+export VAULT_ADDR=http://$${PRIVATE_IP}:8200
+export VAULT_SKIP_VERIFY=true
+# vault operator init > key.txt
+
+##--------------------------------------------------------------------
+## Shortcut script
+##--------------------------------------------------------------------
+sudo cat << EOF > /home/ubuntu/aws_auth.sh
+vault secrets enable -path="secret" kv
+vault kv put secret/myapp/config ttl='30s' username='appuser' password='suP3rsec(et!'
+
+echo "path \"secret/myapp/*\" {
+    capabilities = [\"read\", \"list\"]
+}" | vault policy write myapp -
+
+vault auth enable aws
+vault write -force auth/aws/config/client
+
+vault write auth/aws/role/dev-role-iam auth_type=iam bound_iam_principal_arn="arn:aws:iam::${account_id}:role/${role_name}" policies=myapp ttl=24h
+EOF
+
+sudo chmod +x /home/ubuntu/aws_auth.sh
+
+logger "Complete"
