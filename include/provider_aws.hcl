@@ -37,3 +37,21 @@ provider "aws" {
 }
 EOF
 }
+
+generate "required_providers" {
+  path = "required_aws.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.9"
+    }
+  }
+
+  # required_version = ">= 0.14.9"
+  required_version = ">= 1.7.5"
+}
+EOF
+    }

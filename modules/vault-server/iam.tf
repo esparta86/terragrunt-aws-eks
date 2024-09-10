@@ -1,3 +1,6 @@
+
+##Create Role, trust relationship and policy for the vault server EC2
+
 resource "aws_iam_instance_profile" "vault-server" {
     name = "vault-server-instance-profile"
     role = aws_iam_role.vault-server-role.name
@@ -70,6 +73,8 @@ data "aws_iam_policy_document" "vault-server" {
 #   account =
 # }
 
+
+# Create USER for vault
 data "aws_iam_policy_document" "vault-primary-policy" {
 
   statement {

@@ -165,9 +165,9 @@ variable "cluster_sg_tags" {
 variable "eks_timeout" {
   type = map(string)
   default = {
-    "create" = "40m"
-    "update" = "1h"
-    "delete" = "1h"
+    "create" = "30m"
+    "update" = "30m"
+    "delete" = "30m"
   }
 }
 

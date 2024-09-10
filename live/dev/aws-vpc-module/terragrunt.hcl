@@ -25,7 +25,7 @@ inputs = {
       groups = ["system:bootstrappers","system:nodes"]
     }
   ]
-  eks_endpoint_public_cidrs = ["190.62.47.89/32","131.226.46.151/32"]
+  eks_endpoint_public_cidrs = ["201.247.242.51/32"]
 
 
   # conf_resp_headers_policy_enable_cors = false

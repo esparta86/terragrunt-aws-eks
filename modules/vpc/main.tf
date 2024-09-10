@@ -215,7 +215,8 @@ resource "aws_subnet" "private_subnet2" {
 
 resource "aws_eip" "ip_nat2" {
   count = var.required_second_vpc ? 1 : 0
-  vpc = true
+  # vpc = true
+  domain = "vpc"
   provider = aws.aws2
   tags = merge(var.default_tags,{
     "Name" = "elasticIpNat2"
@@ -224,7 +225,8 @@ resource "aws_eip" "ip_nat2" {
 
 resource "aws_eip" "ip_nat" {
   count = var.required_private_subnets ? 1 : 0
-  vpc = true
+  # vpc = true
+  domain = "vpc"
   tags = merge(var.default_tags,{
     "Name" = "elasticIpNat"
   })

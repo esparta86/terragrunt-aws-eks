@@ -8,7 +8,7 @@ include "provider_aws" {
 
 inputs = {
   environment_name = "nonprd-vault"
-  vpc_cidr = "10.1.0.0/16"
+  # vpc_cidr = "10.1.0.0/16" NOT REQUIRED, VPC was created by vpc module
 
   # Subnets created in the first account
   private_subnets = [ dependency.vpc.outputs.subnet_private_1_account_a_id, dependency.vpc.outputs.subnet_private_2_account_a_id]
@@ -20,7 +20,7 @@ inputs = {
   external_aws = [
     {
     "provider" = "aws2"
-    "account"  = "471112715935"
+    "account"  = "SECOND_ACCOUNT_ID"
     }
   ]
 }

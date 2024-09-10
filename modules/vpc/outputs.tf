@@ -48,6 +48,6 @@ output "subnet_private_2_account_b_id" {
 #   value = aws_subnet.private_subnet2[0].id
 # }
 
-output "route_nat1" {
-  value = local.route_nat1
-}
+# output "route_nat1" {
+#   value = local.route_nat1
+# }

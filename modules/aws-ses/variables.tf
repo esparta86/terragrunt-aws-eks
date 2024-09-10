@@ -75,7 +75,7 @@ variable "configuration_ses" {
     sending_enabled = true
     suppression_options = ["BOUNCE","COMPLAINT"]
     tracking_options_enabled = true
-    tracking_options = "pluto.esparta86.com"
+    tracking_options = "esparta86.com"
 
     event_destination = [
       {
@@ -90,7 +90,7 @@ variable "configuration_ses" {
        },
        {
         sns_destination = true
-        topic_arn = "arn:aws:sns:us-east-1:734237051973:ses_topic_first_configuration"
+        topic_arn = "arn:aws:sns:us-east-1:ACCOUNTID:ses_topic_first_configuration"
         enabled = true
         matching_event_types = ["SEND"]
        }

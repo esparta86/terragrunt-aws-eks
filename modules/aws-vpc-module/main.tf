@@ -60,8 +60,9 @@ module "eks" {
             most_recent = true
 
             timeouts = {
-                create = "25m"
+                create = "10m"
                 delete = "10m"
+                update = "10m"
             }
         }
 
@@ -76,15 +77,15 @@ module "eks" {
              create = "25m"
              delete = "10m"
            }
-           configuration_values = jsonencode({
-              "enableNetworkPolicy": "true",
-              "nodeAgent": {
-                  "healthProbeBindAddr": "8163",
-                  "metricsBindAddr": "8162"
-              }
-            })
+          # No required so far
+          #  configuration_values = jsonencode({
+          #     "enableNetworkPolicy": "true",
+          #     "nodeAgent": {
+          #         "healthProbeBindAddr": "8163",
+          #         "metricsBindAddr": "8162"
+          #     }
+          #   })
         }
-
     }
 
     create_kms_key = false
@@ -196,8 +197,32 @@ module "eks" {
   eks_managed_node_groups  = {
   //local.eks_managed_ng
 
+    # spot0 = {
+    #     min_size = 1
+    #     max_size = 2
+    #     desired_size = 1
+    #     capacity_type = "SPOT"
+    # }
 
+    # spot2 = {
+    #     min_size = 1
+    #     max_size = 2
+    #     desired_size = 1
+    #     capacity_type = "SPOT"
+    #     labels = {
+    #       "colocho/service" = "servicea"
+    #       "colocho/type"    = "compute_1"
+    #       "type"
+    #     }
 
+    #     taints = [
+    #       {
+    #         key   = "dedicated"
+    #         value = "gpuGroup"
+    #         effect = "NO_SCHEDULE"
+    #       }
+    #     ]
+    # }
     spot = {
         # pre_bootstrap_user_data = <<-EOT
         # #!/bin/bash
@@ -217,6 +242,17 @@ module "eks" {
         max_size = 2
         desired_size = 1
         capacity_type = "SPOT"
+        # labels = {
+        #   "colocho/service" = "servicea"
+        #   "colocho/type"    = "compute_1"
+        # }
+        # taints = [
+        #   {
+        #     key   = "dedicated"
+        #     value = "gpuGroup"
+        #     effect = "NO_SCHEDULE"
+        #   }
+        # ]
         # create_iam_role          =  true #default true
         # iam_role_name            = "spot-eks-node-group"
         # iam_role_use_name_prefix = true
