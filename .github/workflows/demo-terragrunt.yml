@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Pull code
-      uses: actions/checkout@v2
+      uses: actions/checkout@main
 
     - name: List files
       run: ls -ls
@@ -42,6 +42,13 @@ jobs:
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ env.working_dir }}
         tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
+
+  plan:
+    runs-on: ubuntu-latest
+    needs: [ init ]
+    steps:
+    - name: Pull code
+      uses: actions/checkout@main
 
     - name: Plan
       uses: gruntwork-io/terragrunt-action@v2
