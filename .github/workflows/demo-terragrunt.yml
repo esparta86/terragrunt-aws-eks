@@ -4,6 +4,10 @@ on:
   push:
     branches:
         - develop
+env:
+  tf_version: '1.7.5'
+  tg_version: '0.66.3'
+  working_dir: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test'
 
 jobs:
   init:
@@ -30,4 +34,11 @@ jobs:
       run: |
         sudo npm install -g aws-cdk@1.31.0
         cdk --version
-        aws sts get-caller-identity
+        aws s3 ls
+    - name: Check terragrunt HCL
+      uses: gruntwork-io/terragrunt-action@v2
+      with:
+        tf_version: ${{ env.tf_version }}
+        tg_version: ${{ env.tg_version }}
+        tg_dir: ${{ env.working_dir }}
+        tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
