@@ -24,7 +24,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACCOUNT_ONE }}
         aws-region: us-east-1
         role-to-assume: ${{ secrets.CROSS_ACCOUNT }}
-        role-duration-seconds: 60
+        role-duration-seconds: 901
         role-skip-session-tagging: true
     - name: Prerequisite Instalation
       run: |
