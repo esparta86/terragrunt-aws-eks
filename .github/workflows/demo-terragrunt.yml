@@ -10,7 +10,7 @@ env:
   working_dir: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test'
 
 jobs:
-  init:
+  plan_apply:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,13 +43,6 @@ jobs:
         tg_dir: ${{ env.working_dir }}
         tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
 
-  plan:
-    runs-on: ubuntu-latest
-    needs: [ init ]
-    steps:
-    - name: Pull code
-      uses: actions/checkout@main
-
     - name: Plan
       uses: gruntwork-io/terragrunt-action@v2
       with:
@@ -57,3 +50,11 @@ jobs:
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ env.working_dir }}
         tg_command: 'plan'
+
+    - name: Apply Changes
+      uses: gruntwork-io/terragrunt-action@v2
+      with:
+        tf_version: ${{ env.tf_version }}
+        tg_version: ${{ env.tg_version }}
+        tg_dir: ${{ env.working_dir }}
+        tg_command: 'apply'
