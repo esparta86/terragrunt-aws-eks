@@ -25,7 +25,7 @@ jobs:
         aws-region: us-east-1
         role-to-assume: ${{ secrets.CROSS_ACCOUNT }}
         role-duration-seconds: 901
-        role-skip-session-tagging: true
+        # role-skip-session-tagging: true
     - name: Prerequisite Instalation
       run: |
         sudo npm install -g aws-cdk@1.31.0
