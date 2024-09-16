@@ -15,4 +15,4 @@ jobs:
 
     - name: List files
       run: ls -ls
-      working-directory: 'live/test'
+      working-directory: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/test'
