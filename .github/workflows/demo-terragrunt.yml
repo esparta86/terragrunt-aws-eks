@@ -30,4 +30,4 @@ jobs:
       run: |
         sudo npm install -g aws-cdk@1.31.0
         cdk --version
-        aws s3 ls
+        aws sts get-caller-identity
