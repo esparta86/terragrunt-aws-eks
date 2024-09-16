@@ -24,7 +24,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACCOUNT_ONE }}
         aws-region: us-east-1
         role-to-assume: ${{ secrets.CROSS_ACCOUNT }}
-        role-duration-seconds: 1200
+        role-duration-seconds: 60
+        role-skip-session-tagging: true
     - name: Prerequisite Instalation
       run: |
         sudo npm install -g aws-cdk@1.31.0
