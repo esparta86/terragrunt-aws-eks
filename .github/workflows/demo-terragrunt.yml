@@ -16,3 +16,17 @@ jobs:
     - name: List files
       run: ls -ls
       working-directory: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ACCOUNT_ONE }}
+        aws-access-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACCOUNT_ONE }}
+        aws-region: us-east-1
+        role-to-assume: ${{ secrets.CROSS_ACCOUNT }}
+        role-duration-seconds: 1200
+    - name: Prerequisite Instalation
+      run: |
+        sudo npm install -g aws-cdk@1.31.0
+        cdk --version
+        aws s3 ls
