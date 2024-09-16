@@ -48,8 +48,6 @@ jobs:
 
     - name: Check terragrunt HCL
       uses: gruntwork-io/terragrunt-action@v2
-      env:
-        TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
       with:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
@@ -58,6 +56,8 @@ jobs:
 
     - name: Plan
       uses: gruntwork-io/terragrunt-action@v2
+      env:
+        TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
       with:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
