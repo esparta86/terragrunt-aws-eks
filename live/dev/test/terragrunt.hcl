@@ -1,5 +1,5 @@
 terraform {
-    source = "../../../modules/test"
+  source = "../../../modules/test"
 }
 
 include "provider_aws" {
@@ -7,7 +7,7 @@ include "provider_aws" {
 }
 
 include {
-    path = find_in_parent_folders()
+  path = find_in_parent_folders()
 }
 
 inputs = {
