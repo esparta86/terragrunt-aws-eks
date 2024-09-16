@@ -8,6 +8,7 @@ env:
   tf_version: '1.7.5'
   tg_version: '0.66.3'
   working_dir: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test'
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
 
 jobs:
   plan_apply:
@@ -35,8 +36,20 @@ jobs:
         sudo npm install -g aws-cdk@1.31.0
         cdk --version
         aws s3 ls
+
+    - name: Create terraform plugin cache dir
+      run: mkdir -p  $TF_PLUGIN_CACHE_DIR
+
+    - name: Terraform Plugin Cache
+      uses: actions/cache@v4.0.1
+      with:
+        path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+        key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
+
     - name: Check terragrunt HCL
       uses: gruntwork-io/terragrunt-action@v2
+      env:
+        TF_PLUGIN_CACHE_DIR: /github/workspace/.terraform.d/plugin-cache
       with:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
@@ -59,6 +72,3 @@ jobs:
         tg_dir: ${{ env.working_dir }}
         tg_command: 'apply'
 
-    - name: List files
-      run: ls -R -l
-      working-directory: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test/.terragrunt-cache'
