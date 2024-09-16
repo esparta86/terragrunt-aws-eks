@@ -15,7 +15,7 @@ remote_state {
         key    =  "${path_relative_to_include()}/terraform.tfstate"
         dynamodb_table = "terraform-locks"
         encrypt = true
-        profile = "personal-1973"
+        # profile = "personal-1973"
     }
 
     generate = {
