@@ -58,3 +58,7 @@ jobs:
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ env.working_dir }}
         tg_command: 'apply'
+
+    - name: List files
+      run: ls -R -l
+      working-directory: '/home/runner/work/terragrunt-aws-eks/terragrunt-aws-eks/live/dev/test/.terragrunt-cache'
