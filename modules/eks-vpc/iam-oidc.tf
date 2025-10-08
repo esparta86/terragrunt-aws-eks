@@ -34,7 +34,7 @@ resource "aws_iam_role" "iam-role-fluent-bit" {
       {
         Effect: "Allow"
         Principal: {
-            Federated: "arn:aws:iam::734237051973:oidc-provider/oidc.eks.${var.region}.amazonaws.com/id/${aws_eks_cluster.eks-deployment.identity[0].oidc[0].issuer}"
+            Federated: "arn:aws:iam::AWS_ACCOUNT:oidc-provider/oidc.eks.${var.region}.amazonaws.com/id/${aws_eks_cluster.eks-deployment.identity[0].oidc[0].issuer}"
         }
         Action: "sts:AssumeRoleWithWebIdentity"
         Condition: {
@@ -73,7 +73,7 @@ resource "aws_iam_policy" "policy_sa_logs" {
                 "logs:PutRetentionPolicy",
                 "cloudwatch:PutLogsEvents"
             ],
-            "Resource": "arn:aws:logs:${var.region}:734237051973:*:*"
+            "Resource": "arn:aws:logs:${var.region}:AWS_ACCOUNT:*:*"
         }
     ]
 }

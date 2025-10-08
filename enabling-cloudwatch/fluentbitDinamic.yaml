@@ -201,7 +201,7 @@ metadata:
   name: fluent-bit
   namespace: amazon-cloudwatch
   annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::734237051973:role/role-fluent-bit-test"
+    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_1:role/role-fluent-bit-test"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

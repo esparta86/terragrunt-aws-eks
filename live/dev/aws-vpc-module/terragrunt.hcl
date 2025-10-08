@@ -1,31 +1,76 @@
-terraform {
-    source = "../../..//modules/aws-vpc-module"
+include "root" {
+  path = find_in_parent_folders("root.hcl")
 }
 
+include "provider_aws" {
+  path = find_in_parent_folders("include/provider_aws.hcl")
+}
+
+
+include "eks" {
+  path   = find_in_parent_folders("include/eks.hcl")
+  expose = true
+}
+
+# include "eks" {
+#   path = "${get_repo_root()}/include/eks.hcl"
+#   expose = true
+# }
+
+
+terraform {
+
+  source = include.eks.locals.source_base_url
+}
+
+
+
+
 inputs = {
-  vpc_name = "main-colocho"
-  vpc_cidr = "10.0.0.0/16"
+  module_name = basename(get_original_terragrunt_dir())
+  tg_map = {
+    "tg_dir" = get_terragrunt_dir()
+    # "tg_parent_dir" = get_parent_terragrunt_dir()
+    "tg_repo_root" = get_repo_root()
+  }
+
+
+
+  aws_account_id            = local.aws_account_id
+  vpc_name                  = "main-colocho"
+  vpc_cidr                  = "10.0.0.0/16"
   enable_compute_ng_default = false
-  cluster_version = "1.29"
+
+  cluster_version = "1.28"
+  create_eks      = true
+
+  enable_ebs_csi_driver = true
+  enable_efs_csi_driver = false
 
   cluster_sg_tags = {
     "kubernetes.io/cluster/ex-aws-vpc-module" = null
-    "karpenter.sh/discovery" = "ex-aws-vpc-module"
+    "karpenter.sh/discovery"                  = "ex-aws-vpc-module"
   }
 
   map_roles_aws = [
     {
-      rolearn = "arn:aws:iam::734237051973:role/RolePowerColocho"
+      rolearn  = "arn:aws:iam::${local.aws_account_id}:role/RolePowerColocho"
       username = "admin-colocho"
-      groups = ["system:masters"]
+      groups   = ["system:masters"]
     },
-    {
-      rolearn = "arn:aws:iam::734237051973:role/KarpenterNodeRole-ex-aws-vpc-module"
-      username = "system:node:{{EC2PrivateDNSName}}"
-      groups = ["system:bootstrappers","system:nodes"]
-    }
+    # {
+    #   rolearn = "arn:aws:iam::${local.aws_account_id}:role/spot-eks-node-group-20250331203140551000000002"
+    #   username = "system:node:{{EC2PrivateDNSName}}"
+    #   groups = ["system:bootstrappers","system:nodes"]
+    # }    
+    # {
+    #   rolearn = "arn:aws:iam::${local.aws_account_id}:role/KarpenterNodeRole-ex-aws-vpc-module"
+    #   username = "system:node:{{EC2PrivateDNSName}}"
+    #   groups = ["system:bootstrappers","system:nodes"]
+    # }
   ]
-  eks_endpoint_public_cidrs = ["201.247.242.51/32"]
+  eks_endpoint_public_cidrs = ["131.226.33.35/32","179.5.94.197/32"]
+
 
 
   # conf_resp_headers_policy_enable_cors = false
@@ -104,8 +149,27 @@ inputs = {
   #   header_items = ["example"]
   # }
 
-}
+   node-group-custom-types = {
+      storage_1 = {
+        name           = "storage_1"
+        min_size       = 2
+        max_size       = 4
+        desired_size   = 2
+        instance_types = ["t3.small"]
+        labels = {
+          "marte.tv/instance-storage-type" = true
+          "marte.tv/node-group"            = "storage_1"
+        }
+        taints = {
+          # storage_1 = {
+          #   key    = "marte.tv/node-group"
+          #   value  = "storage_1"
+          #   effect = "NO_SCHEDULE"
+          # }
+        }
+        # metadata_options = local.metadata_options
+      }
+    }
 
-include {
-    path = find_in_parent_folders()
+
 }

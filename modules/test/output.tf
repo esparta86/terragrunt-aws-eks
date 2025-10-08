@@ -78,3 +78,13 @@
 # output "routes_map" {
 #   value = local.routes_map
 # }
+
+
+output "aws_caller_identity" {
+ value = data.aws_caller_identity.current
+}
+
+
+output "aws_iam_session_context" {
+  value = data.aws_iam_session_context.current
+}

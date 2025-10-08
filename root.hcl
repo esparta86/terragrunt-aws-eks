@@ -10,12 +10,12 @@ remote_state {
     backend = "s3"
 
     config = {
-        bucket = "terragrunt-aws-colocho86"
+        bucket = "BUCKET_NAME"
         region = "us-east-1"
         key    =  "${path_relative_to_include()}/terraform.tfstate"
         dynamodb_table = "terraform-locks"
         encrypt = true
-        # profile = "personal-1973"
+        profile = "PROFILE_AWS"
     }
 
     generate = {

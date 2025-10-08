@@ -6,7 +6,7 @@ resource "aws_vpc" "main_vpc" {
 
 
   tags = merge(var.default_tags, {
-    Name = "main"
+    Name = "ste-use1-1"
   })
 }
 
@@ -181,7 +181,7 @@ resource "aws_subnet" "private_subnet" {
   vpc_id = aws_vpc.main_vpc.id
   cidr_block = var.private_subnet_cidr
   availability_zone = "us-east-1a"
-  tags = merge({"Name"= "private-subnet-1a"},var.default_tags)
+  tags = merge({"Name"= "private-us-east-1a"},var.default_tags)
 }
 
 
@@ -210,7 +210,7 @@ resource "aws_subnet" "private_subnet2" {
   vpc_id = aws_vpc.main_vpc.id
   cidr_block = var.private_subnet_cidr2
   availability_zone = "us-east-1b"
-  tags = merge({"Name"= "private-subnet-1b"},var.default_tags)
+  tags = merge({"Name"= "private-us-east-1b"},var.default_tags)
 }
 
 resource "aws_eip" "ip_nat2" {

@@ -1,3 +1,8 @@
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
+
 variable "vpc_name" {
   description = "name for vpc"
   type        = string
@@ -13,10 +18,16 @@ variable "azs" {
   description = "The availability zones to spread nodes in"
   default = [
     "us-east-1a",
-    "us-east-1b",
-    # "us-east-1c"
+    # "us-east-1b",
+    "us-east-1c"
     ]
   type = list(string)
+}
+
+variable "create_eks" {
+  description = "Determines whether an EKS cluster should be created or use existing"
+  type        = bool
+  default     = true
 }
 
 
@@ -36,7 +47,7 @@ variable "worker_default_instance" {
   description = "The availability zones to spread nodes in"
   default = [
     # "c5n.2xlarge"
-    "t3.medium"
+    "t3.small",
     ]
   type = list(string)
 }
@@ -44,7 +55,7 @@ variable "worker_default_instance" {
 variable "cluster_version" {
   type        = string
   description = "Kubernetes cluster version"
-  default     = "1.25"
+  default     = "1.30"
 }
 
 variable "create_db_cluster_parameter_group" {
@@ -100,9 +111,9 @@ variable "list_manage_compute_ng_default" {
       #       }
       #     }
       #     labels = {
-      #       "pluto.tv/service-dedicated-group" = "istio"
-      #       "pluto.tv/instance-compute-type"   = true
-      #       "pluto.tv/node-group"              = "compute_1"
+      #       "colocho86/service-dedicated-group" = "istio"
+      #       "colocho86/instance-compute-type"   = true
+      #       "colocho86/node-group"              = "compute_1"
       #     }
       #   }
 
@@ -128,8 +139,8 @@ variable "list_manage_compute_ng_default" {
       #         }
       #       }
       #       labels = {
-      #         "pluto.tv/instance-compute-type" = true
-      #         "pluto.tv/node-group"            = "compute_2"
+      #         "colocho86/instance-compute-type" = true
+      #         "colocho86/node-group"            = "compute_2"
 
       #       }
       #       # taints = [
@@ -177,7 +188,15 @@ variable "eks_endpoint_public_cidrs" {
   default = []
 }
 
+variable "list_ebs_csi_roles" {
+  type = list(string)
+  default = [ "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" ]
+}
 
+variable "list_efs_csi_roles" {
+  type = list(string)
+  default = [ "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy" ]
+}
 
 
 ### CORS configuration block ###
@@ -250,3 +269,164 @@ variable "eks_endpoint_public_cidrs" {
 
 
 
+variable "istio_core_chart" {
+    type = string
+    default = "base"
+}
+
+variable "istio_core_repository" {
+  type = string
+  default = "https://istio-release.storage.googleapis.com/charts"
+}
+
+variable "istio_core_version" {
+  type = string
+  default = "1.20.7"
+}
+
+
+
+variable "istio_base_repository" {
+  type    = string
+  default = "https://istio-release.storage.googleapis.com/charts"
+}
+
+variable "istio_base_chart" {
+  type    = string
+  default = "base"
+}
+
+variable "istio_base_version" {
+  type = string
+  #default = "1.12.7"
+  default = "1.17.8"
+}
+
+variable "istio_base_canary_version" {
+  type = string
+  #default = "1.12.7"
+  default = "1.18.0"
+}
+
+variable "image_hub" {
+  type        = string
+  description = "Image repository"
+  default     = "gcr.io/istio-release"
+}
+
+variable "istiod_repository" {
+  type    = string
+  default = "https://istio-release.storage.googleapis.com/charts"
+}
+
+variable "istiod_chart" {
+  type    = string
+  default = "istiod"
+}
+variable "istiod_version" {
+  type    = string
+  default = "1.17.8"
+}
+
+variable "istiod_canary_version" {
+  type    = string
+  default = "1.18.0"
+}
+
+variable "istiod_min_replicas" {
+  type    = string
+  default = "2"
+}
+
+variable "istiod_instance_type" {
+  type    = string
+  default = "t3.medium"
+}
+
+
+variable "cpu_requests_istiod" {
+  type        = string
+  description = "cpu requests for istiod"
+  default     = "0.5"
+}
+
+variable "memory_requests_istiod" {
+  type        = string
+  description = "memory requests for istiod"
+  default     = "1Gi"
+}
+
+variable "team_name" {
+  type        = string
+  description = "name of the service team"
+  default     = "team-infra"
+}
+
+
+variable "service_account_aws_alb" {
+  type        = string
+  description = "Name of the k8s service account"
+  default     = "aws-load-balancer-controller"
+}
+
+
+variable "aws_lb_controller_chart" {
+  type        = string
+  description = "Helm chart name for aws_lb_controller"
+  default     = "aws-load-balancer-controller"
+}
+
+variable "aws_lb_controller_chart_version" {
+  type        = string
+  description = "Helm chart version for aws_lb_controller"
+  default     = "1.6.2"
+}
+
+variable "aws_lb_controller_version" {
+  type        = string
+  description = "aws_lb_controller docker version"
+  default     = "v2.6.2"
+}
+
+variable "aws_lb_controller_repository" {
+  type        = string
+  description = "Helm chart repository for aws_lb_controller"
+  default     = "https://aws.github.io/eks-charts"
+}
+
+variable "enable_efs_csi_driver" {
+  type        = bool
+  description = "Enable EFS CSI driver"
+  default     = true
+}
+
+variable "efs_csi_driver_addon_version" {
+  type        = string
+  description = "EFS CSI driver addon version"
+  default     = "v1.6.0-eksbuild.1"
+}
+
+
+variable "enable_ebs_csi_driver" {
+  type        = bool
+  description = "Enable EBS CSI driver"
+  default     = true
+}
+
+
+variable "module_name" {
+  type        = string
+  description = "Name of the module"
+}
+
+variable "tg_map" {
+  type        = map(string)
+  description = "Map of terragrunt directories"
+}
+
+
+variable "node-group-custom-types" {
+  type        = map(any)
+  description = "values for node groups with different custom types"
+  default     = {}
+}

@@ -1,6 +1,7 @@
 locals {
   account_vars     = read_terragrunt_config(find_in_parent_folders("account.hcl"))
   aws_region       = local.account_vars.locals.aws_region
+  # aws_region  = "eu-west-2"
   aws_account_id   = local.account_vars.locals.aws_account_id
   assume_role_name = local.account_vars.locals.assume_role_name
   profile          = local.account_vars.locals.profile
@@ -13,6 +14,23 @@ locals {
 
 }
 
+generate "provider_eks" {
+  path = "provider_eks.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
+  provider "helm" {
+    kubernetes {
+      config_path = pathexpand("~/.kube/config")
+    }
+  }
+
+  provider "kubernetes" {
+    alias = "charts"
+    config_path = pathexpand("~/.kube/config")
+  }
+EOF
+}
+
 
 generate "provider_aws" {
   path      = "provider_aws.tf"
@@ -21,7 +39,7 @@ generate "provider_aws" {
 provider "aws" {
   region = "${local.aws_region}"
   profile = "${local.profile}"
-  alias  = "aws1"
+  # alias  = "aws1"
   assume_role {
     role_arn = "arn:aws:iam::${local.aws_account_id}:role/${local.assume_role_name}"
   }
@@ -38,6 +56,7 @@ provider "aws" {
 EOF
 }
 
+
 generate "required_providers" {
   path = "required_aws.tf"
   if_exists = "overwrite_terragrunt"
@@ -46,12 +65,21 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.9"
+      version = "< 6.2.0"
     }
+
+    helm = {
+      source = "hashicorp/helm"
+      version =  "2.17.0"
+    }
+
+
   }
 
   # required_version = ">= 0.14.9"
-  required_version = ">= 1.7.5"
+  required_version = ">= 1.11.0"
 }
 EOF
     }
+
+

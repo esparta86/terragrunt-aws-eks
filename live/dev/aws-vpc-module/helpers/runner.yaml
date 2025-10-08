@@ -1,0 +1,12 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: k8s-action-runner
+  namespace: actions-runner-system
+spec:
+  replicas: 0
+  template:
+    spec:
+      repository: pet-clinic-project/github-actions
+      labels:
+        - "eks_runner"

@@ -31,7 +31,7 @@ metadata:
     app.kubernetes.io/version: "0.35.2"
     app.kubernetes.io/managed-by: Helm
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::734237051973:role/KarpenterControllerRole-ex-aws-vpc-module
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_AWS:role/KarpenterControllerRole-ex-aws-vpc-module
 ---
 # Source: karpenter/templates/aggregate-clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1

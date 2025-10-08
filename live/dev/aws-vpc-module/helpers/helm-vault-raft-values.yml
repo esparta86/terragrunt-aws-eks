@@ -1,0 +1,36 @@
+server:
+   affinity: ""
+   ha:
+      enabled: true
+      replicas: 2
+      raft:
+         enabled: true
+         setNodeId: true
+         config: |
+            cluster_name = "vault-integrated-storage"
+            storage "raft" {
+               path    = "/vault/data/"
+            }
+
+            listener "tcp" {
+               address = "[::]:8200"
+               cluster_address = "[::]:8201"
+               tls_disable = "true"
+            }
+            service_registration "kubernetes" {}
+
+   dataStorage:
+      enabled: true
+      # Size of the PVC created
+      size: 5Gi
+      # Location where the PVC will be mounted.
+      mountPath: "/vault/data"
+      # Name of the storage class to use.  If null it will use the
+      # configured default Storage Class.
+      storageClass: gp2
+      # Access Mode of the storage device being used for the PVC
+      accessMode: ReadWriteOnce
+      # Annotations to apply to the PVC
+      annotations: {}
+      # Labels to apply to the PVC
+      labels: {}

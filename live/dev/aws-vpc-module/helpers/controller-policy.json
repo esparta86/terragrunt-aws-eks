@@ -37,13 +37,13 @@
         {
             "Effect": "Allow",
             "Action": "iam:PassRole",
-            "Resource": "arn:aws:iam::734237051973:role/KarpenterNodeRole-ex-aws-vpc-module",
+            "Resource": "arn:aws:iam::AWS_ACCOUNT:role/KarpenterNodeRole-ex-aws-vpc-module",
             "Sid": "PassNodeIAMRole"
         },
         {
             "Effect": "Allow",
             "Action": "eks:DescribeCluster",
-            "Resource": "arn:aws:eks:us-east-1:734237051973:cluster/ex-aws-vpc-module",
+            "Resource": "arn:aws:eks:us-east-1:AWS_ACCOUNT:cluster/ex-aws-vpc-module",
             "Sid": "EKSClusterEndpointLookup"
         }
     ],

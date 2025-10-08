@@ -14,7 +14,7 @@ locals {
   private_subnets = [ for i,v in local.list_azs : cidrsubnet(var.vpc_cidr,4,i)]
   public_subnets   = [ for i,v in local.list_azs : cidrsubnet(var.vpc_cidr,8, i+48) ]
   # intra_subnets =   [ for i,v in local.list_azs: cidrsubnet(var.vpc_cidr,8,i+52)]
-  name = "ex-${replace(basename(path.cwd),"_","-")}"
+  name = "ex-${var.module_name}"
   primary_l = {
       primary = {
         min_size = 0

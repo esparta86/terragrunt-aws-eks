@@ -1,83 +1,81 @@
-variable "instance_type" {
-  description = "The instance type to use"
-  type        = string
-}
-variable "subnet_private_id" {
-  type = string
-  description = "subnet id private "
-}
+# variable "aws_account_id" {
+#   description = "AWS account ID"
+#   type        = string
+# }
 
-variable "instance_name_server" {
-  type = string
-  description = "Instance name of server"
-}
+# variable "cluster_name" {
+#   description = "EKS cluster name"
+#   type        = string
+# }
 
+# variable "jenkins_namespace" {
+#   description = "Kubernetes namespace name for Jenkins"
+#   type        = string
+# }
 
-variable "subnet_public_list" {
-  type = list(any)
-  description = "list of ID subnets created by vpc module"
-}
+# variable "jenkins_controller_service_account" {
+#   description = "Kubernetes service account name for Jenkins Controller"
+#   type        = string
+# }
 
+# variable "environment" {
+#   description = "The environment name, overridden by CI/CD"
+#   type        = string
+#   default     = "dev"
+# }
 
-variable "instance_name" {
-  description = "The name to use for the instance"
-  type        = string
-}
+# variable "region" {
+#   description = "AWS Region to deploy"
+#   type        = string
+#   default     = "us-east-1"
+# }
 
-variable "vpc_id" {
-    type = string
-    description = "vpc id"
-}
+# variable "service" {
+#   description = "Service name"
+#   type        = string
+# }
 
-variable "default_tags" {
-  default = {
-    cloudprovider = "aws"
-    owner         = "true"
-  }
-  description = "default tags name to tag in resources"
-  type = map(string)
-}
+# variable "stack" {
+#   description = "The Stack name, overridden by CI/CD"
+#   type        = string
+#   default     = "jenkins"
+# }
 
+# variable "project_name" {
+#   description = "Project name"
+#   type        = string
+# }
 
+# variable "tags" {
+#   description = "Tags"
+#   type        = map(any)
+#   default     = {}
+# }
 
-variable "cluster_security_group_rules_vms" {
-  type = any
-  default = {
-    "ssh-anywhere" = {
-       "type" = "ingress",
-       "from_port" = 22,
-       "to_port"   = 22,
-       "protocol"  = "tcp",
-       "cidr_blocks" = [ "0.0.0.0/0" ]
-    }
+# variable "mount_point" {
+#   description = "EKS cluster name"
+#   type        = string
+# }
 
-    "all-traffic" = {
-       "type" = "egress",
-       "from_port" = 0,
-       "to_port"   = 0,
-       "protocol"  = "-1",
-       "cidr_blocks" = [ "10.2.0.64/26","10.2.0.128/26" ]
-    }
-  }
-}
+# variable "jenkins_controller_pvc_storage_request" {
+#   description = "Persistence storage space for Jenkins Controller PVC in K8S cluster"
+#   type        = string
+#   default     = "250Gi"
+# }
 
+# variable "jenkins_hostname" {
+#   description = "Jenkins hostname"
+#   type        = string
+# }
 
-variable "cluster_security_group_rules_bastion_server_vms" {
-  type = any
-  default = {
-    "ssh-anywhere" = {
-       "type" = "ingress",
-       "from_port" = 22,
-       "to_port"   = 22,
-       "protocol"  = "tcp"
-    }
+# variable "vault_address" {
+#   description = "Vault server address"
+#   type        = string
+#   default     = ""
+# }
 
-    "all-traffic" = {
-       "type" = "egress",
-       "from_port" = 0,
-       "to_port"   = 0,
-       "protocol"  = "-1",
-       "cidr_blocks" = [ "0.0.0.0/0" ]
-    }
-  }
-}
+# # variable "vault_token" {
+# #   description = "Vault token"
+# #   type        = string
+# #   default     = null
+# # }
