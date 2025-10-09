@@ -36,7 +36,7 @@ inputs = {
 
 
 
-  aws_account_id            = local.aws_account_id
+  aws_account_id            = include.eks.locals.aws_account_id
   vpc_name                  = "main-colocho"
   vpc_cidr                  = "10.0.0.0/16"
   enable_compute_ng_default = false
@@ -54,7 +54,7 @@ inputs = {
 
   map_roles_aws = [
     {
-      rolearn  = "arn:aws:iam::${local.aws_account_id}:role/RolePowerColocho"
+      rolearn  = "arn:aws:iam::${include.eks.locals.aws_account_id}:role/RolePowerColocho"
       username = "admin-colocho"
       groups   = ["system:masters"]
     },
@@ -69,7 +69,7 @@ inputs = {
     #   groups = ["system:bootstrappers","system:nodes"]
     # }
   ]
-  eks_endpoint_public_cidrs = ["131.226.33.35/32","179.5.94.197/32"]
+  eks_endpoint_public_cidrs = ["179.5.94.197/32"]
 
 
 
