@@ -13,6 +13,7 @@ live/dev/aws-vpc-module/.terragrunt-cache
 live/dev/test/.terragrunt-cache
 live/dev/vault-server/.terragrunt-cache
 live/dev/vpc-eks/.terragrunt-cache/
+.terragrunt-cache/
 
 # OS X
 .history

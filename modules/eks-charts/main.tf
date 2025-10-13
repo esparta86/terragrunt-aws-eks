@@ -11,6 +11,7 @@ module "cluster_autoscaler" {
   # source = "/home/esparta86/personal-development/terragrunt-aws-eks/terragrunt-aws-eks/modules/eks-charts/cluster_autoscaler"
 
   cluster_name = var.cluster_name
+  cluster_autoscaler_chart_version =  var.cluster_autoscaler_chart_version
   cluster_oidc_issuer_url = var.cluster_oidc_issuer_url
   service_account_name = var.cluster_autoscaler_service_account_name
   # cluster_id   = dependency.eks.outputs.cluster_id

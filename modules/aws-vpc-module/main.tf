@@ -279,10 +279,12 @@ module "eks" {
     spot0 = {
         name = "spot0"
         min_size = 1
-        max_size = 6
+        max_size = 3
         desired_size = 1
         capacity_type = "SPOT"
         instance_types = ["t3.small"]
+        ami_type = "AL2_x86_64"
+        use_latest_ami_release_version = false
 
         labels = {
           "colocho/GroupNode" = "spot0"

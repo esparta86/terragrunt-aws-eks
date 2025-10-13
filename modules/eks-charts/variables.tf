@@ -14,3 +14,9 @@ variable "cluster_autoscaler_service_account_name" {
   type        = string
   default     = "cluster-autoscaler"
 }
+
+variable "cluster_autoscaler_chart_version" {
+  type        = string
+  description = "Helm chart version for cluster autoscaler"
+  default     = "9.44.0"
+}
