@@ -1,0 +1,1337 @@
+                                                                                                                                                                           bash | 23:05:38
+┌ esparta86@ESPARTA5886  aws-vpc-module   infra-eks-module-20-5-0 ≢ ~4 
+└ $ tg plan
+23:05:52.866 STDOUT terraform: data.aws_caller_identity.current: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_caller_identity.current: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].data.aws_caller_identity.current: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_partition.current: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].data.aws_partition.current: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].data.aws_iam_policy_document.assume_role_policy[0]: Reading...
+23:05:52.866 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_iam_policy_document.assume_role_policy[0]: Reading...
+23:05:52.871 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_partition.current: Read complete after 0s [id=aws]
+23:05:52.871 STDOUT terraform: module.eks[0].data.aws_iam_policy_document.assume_role_policy[0]: Read complete after 0s [id=2764486067]
+23:05:52.872 STDOUT terraform: module.eks[0].data.aws_partition.current: Read complete after 0s [id=aws]
+23:05:52.872 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_iam_policy_document.assume_role_policy[0]: Read complete after 0s [id=2560088296]
+23:05:52.872 STDOUT terraform: data.aws_availability_zones.available: Reading...
+23:05:52.954 STDOUT terraform: module.eks[0].module.eks_managed_node_group["spot0"].data.aws_caller_identity.current: Read complete after 0s [id={{AWS_ACCOUNT}}]
+23:05:53.036 STDOUT terraform: module.eks[0].data.aws_caller_identity.current: Read complete after 0s [id={{AWS_ACCOUNT}}]
+23:05:53.037 STDOUT terraform: module.eks[0].data.aws_iam_session_context.current: Reading...
+23:05:53.118 STDOUT terraform: data.aws_caller_identity.current: Read complete after 0s [id={{AWS_ACCOUNT}}]
+23:05:53.119 STDOUT terraform: data.aws_iam_session_context.current: Reading...
+23:05:53.264 STDOUT terraform: data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+23:05:53.559 STDOUT terraform: module.eks[0].data.aws_iam_session_context.current: Read complete after 1s [id=arn:aws:sts::{{AWS_ACCOUNT}}:assumed-role/RolePowerUserAccess/aws-go-sdk-1760331952045208377]
+23:05:53.560 STDOUT terraform: data.aws_iam_session_context.current: Read complete after 1s [id=arn:aws:sts::{{AWS_ACCOUNT}}:assumed-role/RolePowerUserAccess/aws-go-sdk-1760331952045208377]
+23:05:54.049 STDOUT terraform: Terraform used the selected providers to generate the following execution
+23:05:54.049 STDOUT terraform: plan. Resource actions are indicated with the following symbols:
+23:05:54.049 STDOUT terraform:   + create
+23:05:54.049 STDOUT terraform:  <= read (data resources)
+23:05:54.049 STDOUT terraform: Terraform will perform the following actions:
+23:05:54.049 STDOUT terraform:   # data.aws_iam_policy_document.ebs_csi_assume_role_policy[0] will be read during apply
+23:05:54.049 STDOUT terraform:   # (config refers to values not yet known)
+23:05:54.049 STDOUT terraform:  <= data "aws_iam_policy_document" "ebs_csi_assume_role_policy" {
+23:05:54.049 STDOUT terraform:       + id            = (known after apply)
+23:05:54.049 STDOUT terraform:       + json          = (known after apply)
+23:05:54.049 STDOUT terraform:       + minified_json = (known after apply)
+23:05:54.049 STDOUT terraform:       + statement {
+23:05:54.049 STDOUT terraform:           + actions = [
+23:05:54.049 STDOUT terraform:               + "sts:AssumeRoleWithWebIdentity",
+23:05:54.049 STDOUT terraform:             ]
+23:05:54.049 STDOUT terraform:           + effect  = "Allow"
+23:05:54.049 STDOUT terraform:           + condition {
+23:05:54.049 STDOUT terraform:               + test     = "StringEquals"
+23:05:54.050 STDOUT terraform:               + values   = [
+23:05:54.050 STDOUT terraform:                   + "system:serviceaccount:kube-system:ebs-csi-controller-sa",
+23:05:54.050 STDOUT terraform:                 ]
+23:05:54.050 STDOUT terraform:               + variable = (known after apply)
+23:05:54.050 STDOUT terraform:             }
+23:05:54.050 STDOUT terraform:           + principals {
+23:05:54.050 STDOUT terraform:               + identifiers = [
+23:05:54.050 STDOUT terraform:                   + (known after apply),
+23:05:54.050 STDOUT terraform:                 ]
+23:05:54.050 STDOUT terraform:               + type        = "Federated"
+23:05:54.050 STDOUT terraform:             }
+23:05:54.050 STDOUT terraform:         }
+23:05:54.050 STDOUT terraform:     }
+23:05:54.050 STDOUT terraform:   # aws_iam_role.ebs_csi_role[0] will be created
+23:05:54.050 STDOUT terraform:   + resource "aws_iam_role" "ebs_csi_role" {
+23:05:54.050 STDOUT terraform:       + arn                   = (known after apply)
+23:05:54.050 STDOUT terraform:       + assume_role_policy    = (known after apply)
+23:05:54.050 STDOUT terraform:       + create_date           = (known after apply)
+23:05:54.050 STDOUT terraform:       + force_detach_policies = false
+23:05:54.050 STDOUT terraform:       + id                    = (known after apply)
+23:05:54.050 STDOUT terraform:       + managed_policy_arns   = (known after apply)
+23:05:54.050 STDOUT terraform:       + max_session_duration  = 3600
+23:05:54.050 STDOUT terraform:       + name                  = "AmazonEKS_EBS_CSI_DriverRole"
+23:05:54.051 STDOUT terraform:       + name_prefix           = (known after apply)
+23:05:54.051 STDOUT terraform:       + path                  = "/"
+23:05:54.051 STDOUT terraform:       + tags_all              = (known after apply)
+23:05:54.051 STDOUT terraform:       + unique_id             = (known after apply)
+23:05:54.051 STDOUT terraform:       + inline_policy (known after apply)
+23:05:54.051 STDOUT terraform:     }
+23:05:54.051 STDOUT terraform:   # aws_iam_role_policy_attachment.ebs_csi_attachment["AmazonEBSCSIDriverPolicy"] will be created
+23:05:54.051 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "ebs_csi_attachment" {
+23:05:54.051 STDOUT terraform:       + id         = (known after apply)
+23:05:54.051 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+23:05:54.051 STDOUT terraform:       + role       = "AmazonEKS_EBS_CSI_DriverRole"
+23:05:54.051 STDOUT terraform:     }
+23:05:54.051 STDOUT terraform:   # aws_kms_key.eks will be created
+23:05:54.051 STDOUT terraform:   + resource "aws_kms_key" "eks" {
+23:05:54.051 STDOUT terraform:       + arn                                = (known after apply)
+23:05:54.052 STDOUT terraform:       + bypass_policy_lockout_safety_check = false
+23:05:54.052 STDOUT terraform:       + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+23:05:54.052 STDOUT terraform:       + deletion_window_in_days            = 7
+23:05:54.052 STDOUT terraform:       + description                        = "EKS secret key for ex-aws-vpc-module"
+23:05:54.052 STDOUT terraform:       + enable_key_rotation                = true
+23:05:54.052 STDOUT terraform:       + id                                 = (known after apply)
+23:05:54.052 STDOUT terraform:       + is_enabled                         = true
+23:05:54.052 STDOUT terraform:       + key_id                             = (known after apply)
+23:05:54.052 STDOUT terraform:       + key_usage                          = "ENCRYPT_DECRYPT"
+23:05:54.052 STDOUT terraform:       + multi_region                       = (known after apply)
+23:05:54.052 STDOUT terraform:       + policy                             = (known after apply)
+23:05:54.052 STDOUT terraform:       + rotation_period_in_days            = (known after apply)
+23:05:54.052 STDOUT terraform:       + tags_all                           = (known after apply)
+23:05:54.052 STDOUT terraform:     }
+23:05:54.053 STDOUT terraform:   # module.eks[0].data.aws_eks_addon_version.this["aws-ebs-csi-driver"] will be read during apply
+23:05:54.053 STDOUT terraform:   # (depends on a resource or a module with changes pending)
+23:05:54.053 STDOUT terraform:  <= data "aws_eks_addon_version" "this" {
+23:05:54.053 STDOUT terraform:       + addon_name         = "aws-ebs-csi-driver"
+23:05:54.053 STDOUT terraform:       + id                 = (known after apply)
+23:05:54.053 STDOUT terraform:       + kubernetes_version = "1.28"
+23:05:54.053 STDOUT terraform:       + most_recent        = true
+23:05:54.053 STDOUT terraform:       + version            = (known after apply)
+23:05:54.053 STDOUT terraform:     }
+23:05:54.053 STDOUT terraform:   # module.eks[0].data.aws_eks_addon_version.this["coredns"] will be read during apply
+23:05:54.053 STDOUT terraform:   # (depends on a resource or a module with changes pending)
+23:05:54.053 STDOUT terraform:  <= data "aws_eks_addon_version" "this" {
+23:05:54.053 STDOUT terraform:       + addon_name         = "coredns"
+23:05:54.053 STDOUT terraform:       + id                 = (known after apply)
+23:05:54.053 STDOUT terraform:       + kubernetes_version = "1.28"
+23:05:54.053 STDOUT terraform:       + version            = (known after apply)
+23:05:54.053 STDOUT terraform:     }
+23:05:54.053 STDOUT terraform:   # module.eks[0].data.aws_eks_addon_version.this["kube-proxy"] will be read during apply
+23:05:54.053 STDOUT terraform:   # (depends on a resource or a module with changes pending)
+23:05:54.053 STDOUT terraform:  <= data "aws_eks_addon_version" "this" {
+23:05:54.054 STDOUT terraform:       + addon_name         = "kube-proxy"
+23:05:54.054 STDOUT terraform:       + id                 = (known after apply)
+23:05:54.054 STDOUT terraform:       + kubernetes_version = "1.28"
+23:05:54.054 STDOUT terraform:       + version            = (known after apply)
+23:05:54.054 STDOUT terraform:     }
+23:05:54.054 STDOUT terraform:   # module.eks[0].data.aws_eks_addon_version.this["vpc-cni"] will be read during apply
+23:05:54.054 STDOUT terraform:   # (depends on a resource or a module with changes pending)
+23:05:54.054 STDOUT terraform:  <= data "aws_eks_addon_version" "this" {
+23:05:54.054 STDOUT terraform:       + addon_name         = "vpc-cni"
+23:05:54.054 STDOUT terraform:       + id                 = (known after apply)
+23:05:54.054 STDOUT terraform:       + kubernetes_version = "1.28"
+23:05:54.054 STDOUT terraform:       + version            = (known after apply)
+23:05:54.054 STDOUT terraform:     }
+23:05:54.054 STDOUT terraform:   # module.eks[0].data.tls_certificate.this[0] will be read during apply
+23:05:54.054 STDOUT terraform:   # (config refers to values not yet known)
+23:05:54.054 STDOUT terraform:  <= data "tls_certificate" "this" {
+23:05:54.055 STDOUT terraform:       + certificates = (known after apply)
+23:05:54.055 STDOUT terraform:       + id           = (known after apply)
+23:05:54.055 STDOUT terraform:       + url          = (known after apply)
+23:05:54.055 STDOUT terraform:     }
+23:05:54.055 STDOUT terraform:   # module.eks[0].aws_cloudwatch_log_group.this[0] will be created
+23:05:54.055 STDOUT terraform:   + resource "aws_cloudwatch_log_group" "this" {
+23:05:54.055 STDOUT terraform:       + arn               = (known after apply)
+23:05:54.055 STDOUT terraform:       + id                = (known after apply)
+23:05:54.055 STDOUT terraform:       + log_group_class   = (known after apply)
+23:05:54.055 STDOUT terraform:       + name              = "/aws/eks/ex-aws-vpc-module/cluster"
+23:05:54.055 STDOUT terraform:       + name_prefix       = (known after apply)
+23:05:54.055 STDOUT terraform:       + retention_in_days = 90
+23:05:54.055 STDOUT terraform:       + skip_destroy      = false
+23:05:54.055 STDOUT terraform:       + tags              = {
+23:05:54.055 STDOUT terraform:           + "Name" = "/aws/eks/ex-aws-vpc-module/cluster"
+23:05:54.056 STDOUT terraform:         }
+23:05:54.056 STDOUT terraform:       + tags_all          = {
+23:05:54.056 STDOUT terraform:           + "Name" = "/aws/eks/ex-aws-vpc-module/cluster"
+23:05:54.056 STDOUT terraform:         }
+23:05:54.056 STDOUT terraform:     }
+23:05:54.056 STDOUT terraform:   # module.eks[0].aws_eks_access_entry.this["cluster_creator"] will be created
+23:05:54.056 STDOUT terraform:   + resource "aws_eks_access_entry" "this" {
+23:05:54.056 STDOUT terraform:       + access_entry_arn  = (known after apply)
+23:05:54.056 STDOUT terraform:       + cluster_name      = "ex-aws-vpc-module"
+23:05:54.056 STDOUT terraform:       + created_at        = (known after apply)
+23:05:54.056 STDOUT terraform:       + id                = (known after apply)
+23:05:54.056 STDOUT terraform:       + kubernetes_groups = (known after apply)
+23:05:54.056 STDOUT terraform:       + modified_at       = (known after apply)
+23:05:54.056 STDOUT terraform:       + principal_arn     = "arn:aws:iam::{{AWS_ACCOUNT}}:role/RolePowerUserAccess"
+23:05:54.056 STDOUT terraform:       + tags_all          = (known after apply)
+23:05:54.057 STDOUT terraform:       + type              = "STANDARD"
+23:05:54.057 STDOUT terraform:       + user_name         = (known after apply)
+23:05:54.057 STDOUT terraform:     }
+23:05:54.057 STDOUT terraform:   # module.eks[0].aws_eks_access_policy_association.this["cluster_creator_admin"] will be created
+23:05:54.057 STDOUT terraform:   + resource "aws_eks_access_policy_association" "this" {
+23:05:54.057 STDOUT terraform:       + associated_at = (known after apply)
+23:05:54.057 STDOUT terraform:       + cluster_name  = "ex-aws-vpc-module"
+23:05:54.057 STDOUT terraform:       + id            = (known after apply)
+23:05:54.057 STDOUT terraform:       + modified_at   = (known after apply)
+23:05:54.057 STDOUT terraform:       + policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+23:05:54.057 STDOUT terraform:       + principal_arn = "arn:aws:iam::{{AWS_ACCOUNT}}:role/RolePowerUserAccess"
+23:05:54.058 STDOUT terraform:       + access_scope {
+23:05:54.058 STDOUT terraform:           + type = "cluster"
+23:05:54.058 STDOUT terraform:         }
+23:05:54.058 STDOUT terraform:     }
+23:05:54.058 STDOUT terraform:   # module.eks[0].aws_eks_addon.before_compute["vpc-cni"] will be created
+23:05:54.058 STDOUT terraform:   + resource "aws_eks_addon" "before_compute" {
+23:05:54.058 STDOUT terraform:       + addon_name                  = "vpc-cni"
+23:05:54.058 STDOUT terraform:       + addon_version               = "v1.19.6-eksbuild.7"
+23:05:54.058 STDOUT terraform:       + arn                         = (known after apply)
+23:05:54.058 STDOUT terraform:       + cluster_name                = "ex-aws-vpc-module"
+23:05:54.058 STDOUT terraform:       + configuration_values        = (known after apply)
+23:05:54.058 STDOUT terraform:       + created_at                  = (known after apply)
+23:05:54.058 STDOUT terraform:       + id                          = (known after apply)
+23:05:54.058 STDOUT terraform:       + modified_at                 = (known after apply)
+23:05:54.059 STDOUT terraform:       + preserve                    = true
+23:05:54.059 STDOUT terraform:       + resolve_conflicts_on_create = "OVERWRITE"
+23:05:54.059 STDOUT terraform:       + resolve_conflicts_on_update = "OVERWRITE"
+23:05:54.059 STDOUT terraform:       + tags_all                    = (known after apply)
+23:05:54.059 STDOUT terraform:       + timeouts {
+23:05:54.059 STDOUT terraform:           + create = "25m"
+23:05:54.059 STDOUT terraform:           + delete = "10m"
+23:05:54.059 STDOUT terraform:         }
+23:05:54.059 STDOUT terraform:     }
+23:05:54.059 STDOUT terraform:   # module.eks[0].aws_eks_addon.this["aws-ebs-csi-driver"] will be created
+23:05:54.059 STDOUT terraform:   + resource "aws_eks_addon" "this" {
+23:05:54.059 STDOUT terraform:       + addon_name                  = "aws-ebs-csi-driver"
+23:05:54.059 STDOUT terraform:       + addon_version               = "v1.42.0-eksbuild.1"
+23:05:54.059 STDOUT terraform:       + arn                         = (known after apply)
+23:05:54.059 STDOUT terraform:       + cluster_name                = "ex-aws-vpc-module"
+23:05:54.059 STDOUT terraform:       + configuration_values        = (known after apply)
+23:05:54.059 STDOUT terraform:       + created_at                  = (known after apply)
+23:05:54.060 STDOUT terraform:       + id                          = (known after apply)
+23:05:54.060 STDOUT terraform:       + modified_at                 = (known after apply)
+23:05:54.060 STDOUT terraform:       + preserve                    = true
+23:05:54.060 STDOUT terraform:       + resolve_conflicts_on_create = "OVERWRITE"
+23:05:54.060 STDOUT terraform:       + resolve_conflicts_on_update = "OVERWRITE"
+23:05:54.060 STDOUT terraform:       + service_account_role_arn    = (known after apply)
+23:05:54.060 STDOUT terraform:       + tags_all                    = (known after apply)
+23:05:54.060 STDOUT terraform:       + timeouts {
+23:05:54.060 STDOUT terraform:           + create = "25m"
+23:05:54.060 STDOUT terraform:           + delete = "10m"
+23:05:54.060 STDOUT terraform:         }
+23:05:54.060 STDOUT terraform:     }
+23:05:54.060 STDOUT terraform:   # module.eks[0].aws_eks_addon.this["coredns"] will be created
+23:05:54.060 STDOUT terraform:   + resource "aws_eks_addon" "this" {
+23:05:54.060 STDOUT terraform:       + addon_name                  = "coredns"
+23:05:54.060 STDOUT terraform:       + addon_version               = (known after apply)
+23:05:54.060 STDOUT terraform:       + arn                         = (known after apply)
+23:05:54.060 STDOUT terraform:       + cluster_name                = "ex-aws-vpc-module"
+23:05:54.060 STDOUT terraform:       + configuration_values        = (known after apply)
+23:05:54.060 STDOUT terraform:       + created_at                  = (known after apply)
+23:05:54.060 STDOUT terraform:       + id                          = (known after apply)
+23:05:54.061 STDOUT terraform:       + modified_at                 = (known after apply)
+23:05:54.061 STDOUT terraform:       + preserve                    = true
+23:05:54.061 STDOUT terraform:       + resolve_conflicts_on_create = "OVERWRITE"
+23:05:54.061 STDOUT terraform:       + resolve_conflicts_on_update = "OVERWRITE"
+23:05:54.061 STDOUT terraform:       + tags_all                    = (known after apply)
+23:05:54.061 STDOUT terraform:       + timeouts {
+23:05:54.061 STDOUT terraform:           + create = "10m"
+23:05:54.061 STDOUT terraform:           + delete = "10m"
+23:05:54.061 STDOUT terraform:           + update = "10m"
+23:05:54.061 STDOUT terraform:         }
+23:05:54.061 STDOUT terraform:     }
+23:05:54.061 STDOUT terraform:   # module.eks[0].aws_eks_addon.this["kube-proxy"] will be created
+23:05:54.061 STDOUT terraform:   + resource "aws_eks_addon" "this" {
+23:05:54.061 STDOUT terraform:       + addon_name                  = "kube-proxy"
+23:05:54.061 STDOUT terraform:       + addon_version               = "v1.28.15-eksbuild.31"
+23:05:54.061 STDOUT terraform:       + arn                         = (known after apply)
+23:05:54.062 STDOUT terraform:       + cluster_name                = "ex-aws-vpc-module"
+23:05:54.062 STDOUT terraform:       + configuration_values        = (known after apply)
+23:05:54.062 STDOUT terraform:       + created_at                  = (known after apply)
+23:05:54.062 STDOUT terraform:       + id                          = (known after apply)
+23:05:54.062 STDOUT terraform:       + modified_at                 = (known after apply)
+23:05:54.062 STDOUT terraform:       + preserve                    = true
+23:05:54.062 STDOUT terraform:       + resolve_conflicts_on_create = "OVERWRITE"
+23:05:54.062 STDOUT terraform:       + resolve_conflicts_on_update = "OVERWRITE"
+23:05:54.062 STDOUT terraform:       + tags_all                    = (known after apply)
+23:05:54.062 STDOUT terraform:       + timeouts {}
+23:05:54.062 STDOUT terraform:     }
+23:05:54.062 STDOUT terraform:   # module.eks[0].aws_eks_cluster.this[0] will be created
+23:05:54.063 STDOUT terraform:   + resource "aws_eks_cluster" "this" {
+23:05:54.063 STDOUT terraform:       + arn                           = (known after apply)
+23:05:54.063 STDOUT terraform:       + bootstrap_self_managed_addons = true
+23:05:54.063 STDOUT terraform:       + certificate_authority         = (known after apply)
+23:05:54.063 STDOUT terraform:       + cluster_id                    = (known after apply)
+23:05:54.063 STDOUT terraform:       + created_at                    = (known after apply)
+23:05:54.063 STDOUT terraform:       + enabled_cluster_log_types     = [
+23:05:54.063 STDOUT terraform:           + "api",
+23:05:54.063 STDOUT terraform:           + "audit",
+23:05:54.063 STDOUT terraform:           + "authenticator",
+23:05:54.063 STDOUT terraform:         ]
+23:05:54.063 STDOUT terraform:       + endpoint                      = (known after apply)
+23:05:54.063 STDOUT terraform:       + id                            = (known after apply)
+23:05:54.063 STDOUT terraform:       + identity                      = (known after apply)
+23:05:54.063 STDOUT terraform:       + name                          = "ex-aws-vpc-module"
+23:05:54.063 STDOUT terraform:       + platform_version              = (known after apply)
+23:05:54.063 STDOUT terraform:       + role_arn                      = (known after apply)
+23:05:54.064 STDOUT terraform:       + status                        = (known after apply)
+23:05:54.064 STDOUT terraform:       + tags                          = {
+23:05:54.064 STDOUT terraform:           + "terraform-aws-modules" = "eks"
+23:05:54.064 STDOUT terraform:         }
+23:05:54.064 STDOUT terraform:       + tags_all                      = {
+23:05:54.064 STDOUT terraform:           + "terraform-aws-modules" = "eks"
+23:05:54.064 STDOUT terraform:         }
+23:05:54.064 STDOUT terraform:       + version                       = "1.28"
+23:05:54.064 STDOUT terraform:       + access_config {
+23:05:54.064 STDOUT terraform:           + authentication_mode                         = "API_AND_CONFIG_MAP"
+23:05:54.064 STDOUT terraform:           + bootstrap_cluster_creator_admin_permissions = false
+23:05:54.064 STDOUT terraform:         }
+23:05:54.064 STDOUT terraform:       + encryption_config {
+23:05:54.064 STDOUT terraform:           + resources = [
+23:05:54.064 STDOUT terraform:               + "secrets",
+23:05:54.064 STDOUT terraform:             ]
+23:05:54.064 STDOUT terraform:           + provider {
+23:05:54.064 STDOUT terraform:               + key_arn = (known after apply)
+23:05:54.064 STDOUT terraform:             }
+23:05:54.064 STDOUT terraform:         }
+23:05:54.065 STDOUT terraform:       + kubernetes_network_config {
+23:05:54.065 STDOUT terraform:           + ip_family         = (known after apply)
+23:05:54.065 STDOUT terraform:           + service_ipv4_cidr = (known after apply)
+23:05:54.065 STDOUT terraform:           + service_ipv6_cidr = (known after apply)
+23:05:54.065 STDOUT terraform:           + elastic_load_balancing (known after apply)
+23:05:54.065 STDOUT terraform:         }
+23:05:54.065 STDOUT terraform:       + timeouts {
+23:05:54.065 STDOUT terraform:           + create = "30m"
+23:05:54.065 STDOUT terraform:           + delete = "30m"
+23:05:54.065 STDOUT terraform:           + update = "30m"
+23:05:54.065 STDOUT terraform:         }
+23:05:54.065 STDOUT terraform:       + upgrade_policy (known after apply)
+23:05:54.065 STDOUT terraform:       + vpc_config {
+23:05:54.065 STDOUT terraform:           + cluster_security_group_id = (known after apply)
+23:05:54.065 STDOUT terraform:           + endpoint_private_access   = true
+23:05:54.065 STDOUT terraform:           + endpoint_public_access    = true
+23:05:54.065 STDOUT terraform:           + public_access_cidrs       = [
+23:05:54.065 STDOUT terraform:               + "179.5.94.197/32",
+23:05:54.065 STDOUT terraform:             ]
+23:05:54.065 STDOUT terraform:           + security_group_ids        = (known after apply)
+23:05:54.066 STDOUT terraform:           + subnet_ids                = (known after apply)
+23:05:54.066 STDOUT terraform:           + vpc_id                    = (known after apply)
+23:05:54.066 STDOUT terraform:         }
+23:05:54.066 STDOUT terraform:     }
+23:05:54.066 STDOUT terraform:   # module.eks[0].aws_iam_openid_connect_provider.oidc_provider[0] will be created
+23:05:54.066 STDOUT terraform:   + resource "aws_iam_openid_connect_provider" "oidc_provider" {
+23:05:54.066 STDOUT terraform:       + arn             = (known after apply)
+23:05:54.066 STDOUT terraform:       + client_id_list  = [
+23:05:54.066 STDOUT terraform:           + "sts.amazonaws.com",
+23:05:54.066 STDOUT terraform:         ]
+23:05:54.066 STDOUT terraform:       + id              = (known after apply)
+23:05:54.066 STDOUT terraform:       + tags            = {
+23:05:54.067 STDOUT terraform:           + "Name" = "ex-aws-vpc-module-eks-irsa"
+23:05:54.067 STDOUT terraform:         }
+23:05:54.067 STDOUT terraform:       + tags_all        = {
+23:05:54.067 STDOUT terraform:           + "Name" = "ex-aws-vpc-module-eks-irsa"
+23:05:54.067 STDOUT terraform:         }
+23:05:54.067 STDOUT terraform:       + thumbprint_list = (known after apply)
+23:05:54.067 STDOUT terraform:       + url             = (known after apply)
+23:05:54.067 STDOUT terraform:     }
+23:05:54.067 STDOUT terraform:   # module.eks[0].aws_iam_policy.cluster_encryption[0] will be created
+23:05:54.067 STDOUT terraform:   + resource "aws_iam_policy" "cluster_encryption" {
+23:05:54.067 STDOUT terraform:       + arn              = (known after apply)
+23:05:54.067 STDOUT terraform:       + attachment_count = (known after apply)
+23:05:54.067 STDOUT terraform:       + description      = "Cluster encryption policy to allow cluster role to utilize CMK provided"
+23:05:54.067 STDOUT terraform:       + id               = (known after apply)
+23:05:54.067 STDOUT terraform:       + name             = (known after apply)
+23:05:54.068 STDOUT terraform:       + name_prefix      = "ex-aws-vpc-module-cluster-ClusterEncryption"
+23:05:54.068 STDOUT terraform:       + path             = "/"
+23:05:54.068 STDOUT terraform:       + policy           = (known after apply)
+23:05:54.068 STDOUT terraform:       + policy_id        = (known after apply)
+23:05:54.068 STDOUT terraform:       + tags_all         = (known after apply)
+23:05:54.068 STDOUT terraform:     }
+23:05:54.068 STDOUT terraform:   # module.eks[0].aws_iam_role.this[0] will be created
+23:05:54.068 STDOUT terraform:   + resource "aws_iam_role" "this" {
+23:05:54.068 STDOUT terraform:       + arn                   = (known after apply)
+23:05:54.068 STDOUT terraform:       + assume_role_policy    = jsonencode(
+23:05:54.068 STDOUT terraform:             {
+23:05:54.068 STDOUT terraform:               + Statement = [
+23:05:54.068 STDOUT terraform:                   + {
+23:05:54.068 STDOUT terraform:                       + Action    = "sts:AssumeRole"
+23:05:54.068 STDOUT terraform:                       + Effect    = "Allow"
+23:05:54.068 STDOUT terraform:                       + Principal = {
+23:05:54.068 STDOUT terraform:                           + Service = "eks.amazonaws.com"
+23:05:54.068 STDOUT terraform:                         }
+23:05:54.068 STDOUT terraform:                       + Sid       = "EKSClusterAssumeRole"
+23:05:54.068 STDOUT terraform:                     },
+23:05:54.069 STDOUT terraform:                 ]
+23:05:54.069 STDOUT terraform:               + Version   = "2012-10-17"
+23:05:54.069 STDOUT terraform:             }
+23:05:54.069 STDOUT terraform:         )
+23:05:54.069 STDOUT terraform:       + create_date           = (known after apply)
+23:05:54.069 STDOUT terraform:       + force_detach_policies = true
+23:05:54.069 STDOUT terraform:       + id                    = (known after apply)
+23:05:54.069 STDOUT terraform:       + managed_policy_arns   = (known after apply)
+23:05:54.069 STDOUT terraform:       + max_session_duration  = 3600
+23:05:54.069 STDOUT terraform:       + name                  = (known after apply)
+23:05:54.069 STDOUT terraform:       + name_prefix           = "ex-aws-vpc-module-cluster-"
+23:05:54.069 STDOUT terraform:       + path                  = "/"
+23:05:54.069 STDOUT terraform:       + tags_all              = (known after apply)
+23:05:54.069 STDOUT terraform:       + unique_id             = (known after apply)
+23:05:54.069 STDOUT terraform:       + inline_policy {
+23:05:54.069 STDOUT terraform:           + name   = "ex-aws-vpc-module-cluster"
+23:05:54.069 STDOUT terraform:           + policy = jsonencode(
+23:05:54.069 STDOUT terraform:                 {
+23:05:54.069 STDOUT terraform:                   + Statement = [
+23:05:54.069 STDOUT terraform:                       + {
+23:05:54.069 STDOUT terraform:                           + Action   = [
+23:05:54.069 STDOUT terraform:                               + "logs:CreateLogGroup",
+23:05:54.069 STDOUT terraform:                             ]
+23:05:54.069 STDOUT terraform:                           + Effect   = "Deny"
+23:05:54.069 STDOUT terraform:                           + Resource = "*"
+23:05:54.069 STDOUT terraform:                         },
+23:05:54.069 STDOUT terraform:                     ]
+23:05:54.069 STDOUT terraform:                   + Version   = "2012-10-17"
+23:05:54.069 STDOUT terraform:                 }
+23:05:54.069 STDOUT terraform:             )
+23:05:54.069 STDOUT terraform:         }
+23:05:54.069 STDOUT terraform:     }
+23:05:54.069 STDOUT terraform:   # module.eks[0].aws_iam_role_policy_attachment.cluster_encryption[0] will be created
+23:05:54.070 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "cluster_encryption" {
+23:05:54.070 STDOUT terraform:       + id         = (known after apply)
+23:05:54.070 STDOUT terraform:       + policy_arn = (known after apply)
+23:05:54.070 STDOUT terraform:       + role       = (known after apply)
+23:05:54.070 STDOUT terraform:     }
+23:05:54.070 STDOUT terraform:   # module.eks[0].aws_iam_role_policy_attachment.this["AmazonEKSClusterPolicy"] will be created
+23:05:54.070 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "this" {
+23:05:54.070 STDOUT terraform:       + id         = (known after apply)
+23:05:54.070 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+23:05:54.070 STDOUT terraform:       + role       = (known after apply)
+23:05:54.070 STDOUT terraform:     }
+23:05:54.070 STDOUT terraform:   # module.eks[0].aws_iam_role_policy_attachment.this["AmazonEKSVPCResourceController"] will be created
+23:05:54.070 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "this" {
+23:05:54.070 STDOUT terraform:       + id         = (known after apply)
+23:05:54.070 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+23:05:54.070 STDOUT terraform:       + role       = (known after apply)
+23:05:54.070 STDOUT terraform:     }
+23:05:54.070 STDOUT terraform:   # module.eks[0].aws_security_group.cluster[0] will be created
+23:05:54.070 STDOUT terraform:   + resource "aws_security_group" "cluster" {
+23:05:54.070 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.070 STDOUT terraform:       + description            = "EKS cluster security group"
+23:05:54.070 STDOUT terraform:       + egress                 = (known after apply)
+23:05:54.070 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.070 STDOUT terraform:       + ingress                = (known after apply)
+23:05:54.070 STDOUT terraform:       + name                   = (known after apply)
+23:05:54.070 STDOUT terraform:       + name_prefix            = "ex-aws-vpc-module-cluster-"
+23:05:54.070 STDOUT terraform:       + owner_id               = (known after apply)
+23:05:54.070 STDOUT terraform:       + revoke_rules_on_delete = false
+23:05:54.070 STDOUT terraform:       + tags                   = {
+23:05:54.070 STDOUT terraform:           + "Name"                   = "ex-aws-vpc-module-cluster"
+23:05:54.071 STDOUT terraform:           + "karpenter.sh/discovery" = "ex-aws-vpc-module"
+23:05:54.071 STDOUT terraform:         }
+23:05:54.071 STDOUT terraform:       + tags_all               = {
+23:05:54.071 STDOUT terraform:           + "Name"                   = "ex-aws-vpc-module-cluster"
+23:05:54.071 STDOUT terraform:           + "karpenter.sh/discovery" = "ex-aws-vpc-module"
+23:05:54.071 STDOUT terraform:         }
+23:05:54.071 STDOUT terraform:       + vpc_id                 = (known after apply)
+23:05:54.071 STDOUT terraform:     }
+23:05:54.071 STDOUT terraform:   # module.eks[0].aws_security_group.node[0] will be created
+23:05:54.071 STDOUT terraform:   + resource "aws_security_group" "node" {
+23:05:54.071 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.071 STDOUT terraform:       + description            = "EKS node shared security group"
+23:05:54.071 STDOUT terraform:       + egress                 = (known after apply)
+23:05:54.071 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.071 STDOUT terraform:       + ingress                = (known after apply)
+23:05:54.071 STDOUT terraform:       + name                   = (known after apply)
+23:05:54.071 STDOUT terraform:       + name_prefix            = "ex-aws-vpc-module-node-"
+23:05:54.071 STDOUT terraform:       + owner_id               = (known after apply)
+23:05:54.071 STDOUT terraform:       + revoke_rules_on_delete = false
+23:05:54.071 STDOUT terraform:       + tags                   = {
+23:05:54.071 STDOUT terraform:           + "Name"                   = "ex-aws-vpc-module-node"
+23:05:54.071 STDOUT terraform:           + "karpenter.sh/discovery" = "ex-aws-vpc-module"
+23:05:54.071 STDOUT terraform:         }
+23:05:54.071 STDOUT terraform:       + tags_all               = {
+23:05:54.071 STDOUT terraform:           + "Name"                   = "ex-aws-vpc-module-node"
+23:05:54.071 STDOUT terraform:           + "karpenter.sh/discovery" = "ex-aws-vpc-module"
+23:05:54.071 STDOUT terraform:         }
+23:05:54.071 STDOUT terraform:       + vpc_id                 = (known after apply)
+23:05:54.071 STDOUT terraform:     }
+23:05:54.071 STDOUT terraform:   # module.eks[0].aws_security_group_rule.cluster["ingress_nodes_443"] will be created
+23:05:54.071 STDOUT terraform:   + resource "aws_security_group_rule" "cluster" {
+23:05:54.071 STDOUT terraform:       + description              = "Node groups to cluster API"
+23:05:54.071 STDOUT terraform:       + from_port                = 443
+23:05:54.071 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.072 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.072 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.072 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.072 STDOUT terraform:       + self                     = false
+23:05:54.072 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.072 STDOUT terraform:       + to_port                  = 443
+23:05:54.072 STDOUT terraform:       + type                     = "ingress"
+23:05:54.072 STDOUT terraform:     }
+23:05:54.072 STDOUT terraform:   # module.eks[0].aws_security_group_rule.cluster["ingress_nodes_ephemeral_ports_tcp"] will be created
+23:05:54.072 STDOUT terraform:   + resource "aws_security_group_rule" "cluster" {
+23:05:54.072 STDOUT terraform:       + description              = "Nodes on ephemeral ports"
+23:05:54.072 STDOUT terraform:       + from_port                = 1025
+23:05:54.072 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.073 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.073 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.073 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.073 STDOUT terraform:       + self                     = false
+23:05:54.073 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.073 STDOUT terraform:       + to_port                  = 65535
+23:05:54.073 STDOUT terraform:       + type                     = "ingress"
+23:05:54.073 STDOUT terraform:     }
+23:05:54.073 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["egress_all"] will be created
+23:05:54.073 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.073 STDOUT terraform:       + cidr_blocks              = [
+23:05:54.073 STDOUT terraform:           + "0.0.0.0/0",
+23:05:54.073 STDOUT terraform:         ]
+23:05:54.073 STDOUT terraform:       + description              = "Allow all egress"
+23:05:54.073 STDOUT terraform:       + from_port                = 0
+23:05:54.073 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.073 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.073 STDOUT terraform:       + protocol                 = "-1"
+23:05:54.073 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.073 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.074 STDOUT terraform:       + self                     = false
+23:05:54.074 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.074 STDOUT terraform:       + to_port                  = 0
+23:05:54.074 STDOUT terraform:       + type                     = "egress"
+23:05:54.074 STDOUT terraform:     }
+23:05:54.074 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_15012"] will be created
+23:05:54.074 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.074 STDOUT terraform:       + description              = "Cluster API to nodes ports/protocols"
+23:05:54.074 STDOUT terraform:       + from_port                = 15012
+23:05:54.074 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.074 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.074 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.074 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.074 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.074 STDOUT terraform:       + self                     = false
+23:05:54.074 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.074 STDOUT terraform:       + to_port                  = 15012
+23:05:54.074 STDOUT terraform:       + type                     = "ingress"
+23:05:54.074 STDOUT terraform:     }
+23:05:54.074 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_15017"] will be created
+23:05:54.074 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.074 STDOUT terraform:       + description              = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
+23:05:54.075 STDOUT terraform:       + from_port                = 15017
+23:05:54.075 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.075 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.075 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.075 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.075 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.075 STDOUT terraform:       + self                     = false
+23:05:54.075 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.075 STDOUT terraform:       + to_port                  = 15017
+23:05:54.075 STDOUT terraform:       + type                     = "ingress"
+23:05:54.075 STDOUT terraform:     }
+23:05:54.075 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_443"] will be created
+23:05:54.075 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.075 STDOUT terraform:       + description              = "Cluster API to node groups"
+23:05:54.075 STDOUT terraform:       + from_port                = 443
+23:05:54.075 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.075 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.075 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.075 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.075 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.075 STDOUT terraform:       + self                     = false
+23:05:54.076 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.076 STDOUT terraform:       + to_port                  = 443
+23:05:54.076 STDOUT terraform:       + type                     = "ingress"
+23:05:54.076 STDOUT terraform:     }
+23:05:54.076 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_4443_webhook"] will be created
+23:05:54.076 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.076 STDOUT terraform:       + description              = "Cluster API to node 4443/tcp webhook"
+23:05:54.076 STDOUT terraform:       + from_port                = 4443
+23:05:54.076 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.076 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.076 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.076 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.076 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.077 STDOUT terraform:       + self                     = false
+23:05:54.077 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.077 STDOUT terraform:       + to_port                  = 4443
+23:05:54.077 STDOUT terraform:       + type                     = "ingress"
+23:05:54.077 STDOUT terraform:     }
+23:05:54.077 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_6443_webhook"] will be created
+23:05:54.077 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.077 STDOUT terraform:       + description              = "Cluster API to node 6443/tcp webhook"
+23:05:54.077 STDOUT terraform:       + from_port                = 6443
+23:05:54.077 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.077 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.077 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.077 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.077 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.077 STDOUT terraform:       + self                     = false
+23:05:54.078 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.078 STDOUT terraform:       + to_port                  = 6443
+23:05:54.078 STDOUT terraform:       + type                     = "ingress"
+23:05:54.078 STDOUT terraform:     }
+23:05:54.078 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_8443_webhook"] will be created
+23:05:54.078 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.078 STDOUT terraform:       + description              = "Cluster API to node 8443/tcp webhook"
+23:05:54.078 STDOUT terraform:       + from_port                = 8443
+23:05:54.078 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.078 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.078 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.078 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.078 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.078 STDOUT terraform:       + self                     = false
+23:05:54.078 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.078 STDOUT terraform:       + to_port                  = 8443
+23:05:54.078 STDOUT terraform:       + type                     = "ingress"
+23:05:54.078 STDOUT terraform:     }
+23:05:54.078 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_9443_webhook"] will be created
+23:05:54.079 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.079 STDOUT terraform:       + description              = "Cluster API to node 9443/tcp webhook"
+23:05:54.079 STDOUT terraform:       + from_port                = 9443
+23:05:54.079 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.079 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.079 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.079 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.079 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.079 STDOUT terraform:       + self                     = false
+23:05:54.079 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.079 STDOUT terraform:       + to_port                  = 9443
+23:05:54.079 STDOUT terraform:       + type                     = "ingress"
+23:05:54.079 STDOUT terraform:     }
+23:05:54.079 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_cluster_kubelet"] will be created
+23:05:54.079 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.079 STDOUT terraform:       + description              = "Cluster API to node kubelets"
+23:05:54.080 STDOUT terraform:       + from_port                = 10250
+23:05:54.080 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.080 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.080 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.080 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.080 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.080 STDOUT terraform:       + self                     = false
+23:05:54.080 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.080 STDOUT terraform:       + to_port                  = 10250
+23:05:54.080 STDOUT terraform:       + type                     = "ingress"
+23:05:54.080 STDOUT terraform:     }
+23:05:54.080 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_nodes_ephemeral"] will be created
+23:05:54.080 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.080 STDOUT terraform:       + description              = "Node to node ingress on ephemeral ports"
+23:05:54.080 STDOUT terraform:       + from_port                = 1025
+23:05:54.080 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.081 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.081 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.081 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.081 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.081 STDOUT terraform:       + self                     = true
+23:05:54.081 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.081 STDOUT terraform:       + to_port                  = 65535
+23:05:54.081 STDOUT terraform:       + type                     = "ingress"
+23:05:54.081 STDOUT terraform:     }
+23:05:54.081 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_self_all"] will be created
+23:05:54.081 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.081 STDOUT terraform:       + description              = "Node to node all ports/protocols"
+23:05:54.081 STDOUT terraform:       + from_port                = 0
+23:05:54.081 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.081 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.082 STDOUT terraform:       + protocol                 = "-1"
+23:05:54.082 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.082 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.082 STDOUT terraform:       + self                     = true
+23:05:54.082 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.082 STDOUT terraform:       + to_port                  = 0
+23:05:54.082 STDOUT terraform:       + type                     = "ingress"
+23:05:54.082 STDOUT terraform:     }
+23:05:54.082 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_self_coredns_tcp"] will be created
+23:05:54.082 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.082 STDOUT terraform:       + description              = "Node to node CoreDNS"
+23:05:54.082 STDOUT terraform:       + from_port                = 53
+23:05:54.082 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.082 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.082 STDOUT terraform:       + protocol                 = "tcp"
+23:05:54.082 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.083 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.083 STDOUT terraform:       + self                     = true
+23:05:54.083 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.083 STDOUT terraform:       + to_port                  = 53
+23:05:54.083 STDOUT terraform:       + type                     = "ingress"
+23:05:54.083 STDOUT terraform:     }
+23:05:54.083 STDOUT terraform:   # module.eks[0].aws_security_group_rule.node["ingress_self_coredns_udp"] will be created
+23:05:54.083 STDOUT terraform:   + resource "aws_security_group_rule" "node" {
+23:05:54.083 STDOUT terraform:       + description              = "Node to node CoreDNS UDP"
+23:05:54.083 STDOUT terraform:       + from_port                = 53
+23:05:54.083 STDOUT terraform:       + id                       = (known after apply)
+23:05:54.083 STDOUT terraform:       + prefix_list_ids          = []
+23:05:54.083 STDOUT terraform:       + protocol                 = "udp"
+23:05:54.083 STDOUT terraform:       + security_group_id        = (known after apply)
+23:05:54.084 STDOUT terraform:       + security_group_rule_id   = (known after apply)
+23:05:54.084 STDOUT terraform:       + self                     = true
+23:05:54.084 STDOUT terraform:       + source_security_group_id = (known after apply)
+23:05:54.084 STDOUT terraform:       + to_port                  = 53
+23:05:54.084 STDOUT terraform:       + type                     = "ingress"
+23:05:54.084 STDOUT terraform:     }
+23:05:54.084 STDOUT terraform:   # module.eks[0].time_sleep.this[0] will be created
+23:05:54.084 STDOUT terraform:   + resource "time_sleep" "this" {
+23:05:54.084 STDOUT terraform:       + create_duration = "30s"
+23:05:54.084 STDOUT terraform:       + id              = (known after apply)
+23:05:54.084 STDOUT terraform:       + triggers        = {
+23:05:54.084 STDOUT terraform:           + "cluster_certificate_authority_data" = (known after apply)
+23:05:54.084 STDOUT terraform:           + "cluster_endpoint"                   = (known after apply)
+23:05:54.084 STDOUT terraform:           + "cluster_name"                       = "ex-aws-vpc-module"
+23:05:54.084 STDOUT terraform:           + "cluster_version"                    = "1.28"
+23:05:54.084 STDOUT terraform:         }
+23:05:54.084 STDOUT terraform:     }
+23:05:54.084 STDOUT terraform:   # module.eks-auth[0].kubernetes_config_map_v1_data.aws_auth[0] will be created
+23:05:54.085 STDOUT terraform:   + resource "kubernetes_config_map_v1_data" "aws_auth" {
+23:05:54.085 STDOUT terraform:       + data          = {
+23:05:54.085 STDOUT terraform:           + "mapAccounts" = jsonencode([])
+23:05:54.085 STDOUT terraform:           + "mapRoles"    = <<-EOT
+23:05:54.085 STDOUT terraform:                 - "groups":
+23:05:54.085 STDOUT terraform:                   - "system:masters"
+23:05:54.085 STDOUT terraform:                   "rolearn": "arn:aws:iam::{{AWS_ACCOUNT}}:role/RolePowerColocho"
+23:05:54.085 STDOUT terraform:                   "username": "admin-colocho"
+23:05:54.085 STDOUT terraform:             EOT
+23:05:54.085 STDOUT terraform:           + "mapUsers"    = jsonencode([])
+23:05:54.085 STDOUT terraform:         }
+23:05:54.085 STDOUT terraform:       + field_manager = "Terraform"
+23:05:54.085 STDOUT terraform:       + force         = true
+23:05:54.085 STDOUT terraform:       + id            = (known after apply)
+23:05:54.085 STDOUT terraform:       + metadata {
+23:05:54.085 STDOUT terraform:           + name      = "aws-auth"
+23:05:54.085 STDOUT terraform:           + namespace = "kube-system"
+23:05:54.085 STDOUT terraform:         }
+23:05:54.086 STDOUT terraform:     }
+23:05:54.086 STDOUT terraform:   # module.vpc.aws_default_route_table.default[0] will be created
+23:05:54.086 STDOUT terraform:   + resource "aws_default_route_table" "default" {
+23:05:54.086 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.086 STDOUT terraform:       + default_route_table_id = (known after apply)
+23:05:54.086 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.086 STDOUT terraform:       + owner_id               = (known after apply)
+23:05:54.086 STDOUT terraform:       + route                  = (known after apply)
+23:05:54.086 STDOUT terraform:       + tags                   = {
+23:05:54.086 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.086 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-default"
+23:05:54.086 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.086 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.086 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.086 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.087 STDOUT terraform:         }
+23:05:54.087 STDOUT terraform:       + tags_all               = {
+23:05:54.087 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.087 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-default"
+23:05:54.087 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.087 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.087 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.087 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.087 STDOUT terraform:         }
+23:05:54.087 STDOUT terraform:       + vpc_id                 = (known after apply)
+23:05:54.087 STDOUT terraform:       + timeouts {
+23:05:54.087 STDOUT terraform:           + create = "5m"
+23:05:54.088 STDOUT terraform:   
+23:05:54.088 STDOUT terraform:         + update = "5m"
+23:05:54.088 STDOUT terraform:         }
+23:05:54.088 STDOUT terraform:     }
+23:05:54.088 STDOUT terraform:   # module.vpc.aws_default_security_group.this[0] will be created
+23:05:54.088 STDOUT terraform:   + resource "aws_default_security_group" "this" {
+23:05:54.088 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.088 STDOUT terraform:       + description            = (known after apply)
+23:05:54.088 STDOUT terraform:       + egress                 = (known after apply)
+23:05:54.088 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.088 STDOUT terraform:       + ingress                = (known after apply)
+23:05:54.088 STDOUT terraform:       + name                   = (known after apply)
+23:05:54.088 STDOUT terraform:       + name_prefix            = (known after apply)
+23:05:54.088 STDOUT terraform:       + owner_id               = (known after apply)
+23:05:54.088 STDOUT terraform:       + revoke_rules_on_delete = false
+23:05:54.088 STDOUT terraform:       + tags                   = {
+23:05:54.088 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.088 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-default"
+23:05:54.088 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.089 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.089 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.089 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.089 STDOUT terraform:         }
+23:05:54.089 STDOUT terraform:       + tags_all               = {
+23:05:54.089 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.089 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-default"
+23:05:54.089 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.089 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.089 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.089 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.089 STDOUT terraform:         }
+23:05:54.089 STDOUT terraform:       + vpc_id                 = (known after apply)
+23:05:54.089 STDOUT terraform:     }
+23:05:54.089 STDOUT terraform:   # module.vpc.aws_eip.nat[0] will be created
+23:05:54.089 STDOUT terraform:   + resource "aws_eip" "nat" {
+23:05:54.090 STDOUT terraform:       + allocation_id        = (known after apply)
+23:05:54.090 STDOUT terraform:       + arn                  = (known after apply)
+23:05:54.090 STDOUT terraform:       + association_id       = (known after apply)
+23:05:54.090 STDOUT terraform:       + carrier_ip           = (known after apply)
+23:05:54.090 STDOUT terraform:       + customer_owned_ip    = (known after apply)
+23:05:54.090 STDOUT terraform:       + domain               = "vpc"
+23:05:54.090 STDOUT terraform:       + id                   = (known after apply)
+23:05:54.090 STDOUT terraform:       + instance             = (known after apply)
+23:05:54.090 STDOUT terraform:       + ipam_pool_id         = (known after apply)
+23:05:54.090 STDOUT terraform:       + network_border_group = (known after apply)
+23:05:54.090 STDOUT terraform:       + network_interface    = (known after apply)
+23:05:54.090 STDOUT terraform:       + private_dns          = (known after apply)
+23:05:54.090 STDOUT terraform:       + private_ip           = (known after apply)
+23:05:54.090 STDOUT terraform:       + ptr_record           = (known after apply)
+23:05:54.090 STDOUT terraform:       + public_dns           = (known after apply)
+23:05:54.090 STDOUT terraform:       + public_ip            = (known after apply)
+23:05:54.090 STDOUT terraform:       + public_ipv4_pool     = (known after apply)
+23:05:54.090 STDOUT terraform:       + tags                 = {
+23:05:54.090 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.090 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-us-east-1a"
+23:05:54.090 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.090 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.091 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.091 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.091 STDOUT terraform:         }
+23:05:54.091 STDOUT terraform:       + tags_all             = {
+23:05:54.091 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.091 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-us-east-1a"
+23:05:54.091 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.091 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.091 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.091 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.091 STDOUT terraform:         }
+23:05:54.091 STDOUT terraform:       + vpc                  = (known after apply)
+23:05:54.092 STDOUT terraform:     }
+23:05:54.092 STDOUT terraform:   # module.vpc.aws_internet_gateway.this[0] will be created
+23:05:54.092 STDOUT terraform:   + resource "aws_internet_gateway" "this" {
+23:05:54.092 STDOUT terraform:       + arn      = (known after apply)
+23:05:54.092 STDOUT terraform:       + id       = (known after apply)
+23:05:54.092 STDOUT terraform:       + owner_id = (known after apply)
+23:05:54.092 STDOUT terraform:       + tags     = {
+23:05:54.092 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.092 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module"
+23:05:54.092 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.092 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.092 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.092 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.092 STDOUT terraform:         }
+23:05:54.092 STDOUT terraform:       + tags_all = {
+23:05:54.092 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.093 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module"
+23:05:54.093 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.093 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.093 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.093 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.093 STDOUT terraform:         }
+23:05:54.093 STDOUT terraform:       + vpc_id   = (known after apply)
+23:05:54.093 STDOUT terraform:     }
+23:05:54.093 STDOUT terraform:   # module.vpc.aws_nat_gateway.this[0] will be created
+23:05:54.093 STDOUT terraform:   + resource "aws_nat_gateway" "this" {
+23:05:54.093 STDOUT terraform:       + allocation_id                      = (known after apply)
+23:05:54.093 STDOUT terraform:       + association_id                     = (known after apply)
+23:05:54.094 STDOUT terraform:       + connectivity_type                  = "public"
+23:05:54.094 STDOUT terraform:       + id                                 = (known after apply)
+23:05:54.094 STDOUT terraform:       + network_interface_id               = (known after apply)
+23:05:54.094 STDOUT terraform:       + private_ip                         = (known after apply)
+23:05:54.094 STDOUT terraform:       + public_ip                          = (known after apply)
+23:05:54.094 STDOUT terraform:       + secondary_private_ip_address_count = (known after apply)
+23:05:54.094 STDOUT terraform:       + secondary_private_ip_addresses     = (known after apply)
+23:05:54.094 STDOUT terraform:       + subnet_id                          = (known after apply)
+23:05:54.094 STDOUT terraform:       + tags                               = {
+23:05:54.094 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.094 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-us-east-1a"
+23:05:54.094 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.094 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.094 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.094 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.095 STDOUT terraform:         }
+23:05:54.095 STDOUT terraform:       + tags_all                           = {
+23:05:54.095 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.095 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-us-east-1a"
+23:05:54.095 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.095 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.095 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.095 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.095 STDOUT terraform:         }
+23:05:54.095 STDOUT terraform:     }
+23:05:54.095 STDOUT terraform:   # module.vpc.aws_route.private_nat_gateway[0] will be created
+23:05:54.095 STDOUT terraform:   + resource "aws_route" "private_nat_gateway" {
+23:05:54.095 STDOUT terraform:       + destination_cidr_block = "0.0.0.0/0"
+23:05:54.095 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.095 STDOUT terraform:       + instance_id            = (known after apply)
+23:05:54.095 STDOUT terraform:       + instance_owner_id      = (known after apply)
+23:05:54.096 STDOUT terraform:       + nat_gateway_id         = (known after apply)
+23:05:54.096 STDOUT terraform:       + network_interface_id   = (known after apply)
+23:05:54.096 STDOUT terraform:       + origin                 = (known after apply)
+23:05:54.096 STDOUT terraform:       + route_table_id         = (known after apply)
+23:05:54.096 STDOUT terraform:       + state                  = (known after apply)
+23:05:54.096 STDOUT terraform:       + timeouts {
+23:05:54.096 STDOUT terraform:           + create = "5m"
+23:05:54.096 STDOUT terraform:         }
+23:05:54.096 STDOUT terraform:     }
+23:05:54.096 STDOUT terraform:   # module.vpc.aws_route.public_internet_gateway[0] will be created
+23:05:54.096 STDOUT terraform:   + resource "aws_route" "public_internet_gateway" {
+23:05:54.096 STDOUT terraform:       + destination_cidr_block = "0.0.0.0/0"
+23:05:54.096 STDOUT terraform:       + gateway_id             = (known after apply)
+23:05:54.096 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.096 STDOUT terraform:       + instance_id            = (known after apply)
+23:05:54.096 STDOUT terraform:       + instance_owner_id      = (known after apply)
+23:05:54.096 STDOUT terraform:       + network_interface_id   = (known after apply)
+23:05:54.096 STDOUT terraform:       + origin                 = (known after apply)
+23:05:54.096 STDOUT terraform:       + route_table_id         = (known after apply)
+23:05:54.097 STDOUT terraform:       + state                  = (known after apply)
+23:05:54.097 STDOUT terraform:       + timeouts {
+23:05:54.097 STDOUT terraform:           + create = "5m"
+23:05:54.097 STDOUT terraform:         }
+23:05:54.097 STDOUT terraform:     }
+23:05:54.097 STDOUT terraform:   # module.vpc.aws_route_table.private[0] will be created
+23:05:54.097 STDOUT terraform:   + resource "aws_route_table" "private" {
+23:05:54.097 STDOUT terraform:       + arn              = (known after apply)
+23:05:54.097 STDOUT terraform:       + id               = (known after apply)
+23:05:54.097 STDOUT terraform:       + owner_id         = (known after apply)
+23:05:54.097 STDOUT terraform:       + propagating_vgws = (known after apply)
+23:05:54.097 STDOUT terraform:       + route            = (known after apply)
+23:05:54.097 STDOUT terraform:       + tags             = {
+23:05:54.097 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.097 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private"
+23:05:54.097 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.097 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.097 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.097 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.097 STDOUT terraform:         }
+23:05:54.097 STDOUT terraform:       + tags_all         = {
+23:05:54.097 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.098 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private"
+23:05:54.098 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.098 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.098 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.098 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.098 STDOUT terraform:         }
+23:05:54.098 STDOUT terraform:       + vpc_id           = (known after apply)
+23:05:54.098 STDOUT terraform:     }
+23:05:54.098 STDOUT terraform:   # module.vpc.aws_route_table.public[0] will be created
+23:05:54.098 STDOUT terraform:   + resource "aws_route_table" "public" {
+23:05:54.098 STDOUT terraform:       + arn              = (known after apply)
+23:05:54.098 STDOUT terraform:       + id               = (known after apply)
+23:05:54.098 STDOUT terraform:       + owner_id         = (known after apply)
+23:05:54.098 STDOUT terraform:       + propagating_vgws = (known after apply)
+23:05:54.098 STDOUT terraform:       + route            = (known after apply)
+23:05:54.098 STDOUT terraform:       + tags             = {
+23:05:54.098 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.098 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public"
+23:05:54.099 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.099 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.099 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.099 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.099 STDOUT terraform:         }
+23:05:54.099 STDOUT terraform:       + tags_all         = {
+23:05:54.099 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.099 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public"
+23:05:54.099 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.099 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.099 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.099 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.099 STDOUT terraform:         }
+23:05:54.099 STDOUT terraform:       + vpc_id           = (known after apply)
+23:05:54.100 STDOUT terraform:     }
+23:05:54.100 STDOUT terraform:   # module.vpc.aws_route_table_association.private[0] will be created
+23:05:54.100 STDOUT terraform:   + resource "aws_route_table_association" "private" {
+23:05:54.100 STDOUT terraform:       + id             = (known after apply)
+23:05:54.100 STDOUT terraform:       + route_table_id = (known after apply)
+23:05:54.100 STDOUT terraform:       + subnet_id      = (known after apply)
+23:05:54.100 STDOUT terraform:     }
+23:05:54.100 STDOUT terraform:   # module.vpc.aws_route_table_association.private[1] will be created
+23:05:54.100 STDOUT terraform:   + resource "aws_route_table_association" "private" {
+23:05:54.100 STDOUT terraform:       + id             = (known after apply)
+23:05:54.100 STDOUT terraform:       + route_table_id = (known after apply)
+23:05:54.101 STDOUT terraform:       + subnet_id      = (known after apply)
+23:05:54.101 STDOUT terraform:     }
+23:05:54.101 STDOUT terraform:   # module.vpc.aws_route_table_association.public[0] will be created
+23:05:54.101 STDOUT terraform:   + resource "aws_route_table_association" "public" {
+23:05:54.101 STDOUT terraform:       + id             = (known after apply)
+23:05:54.101 STDOUT terraform:       + route_table_id = (known after apply)
+23:05:54.101 STDOUT terraform:       + subnet_id      = (known after apply)
+23:05:54.101 STDOUT terraform:     }
+23:05:54.101 STDOUT terraform:   # module.vpc.aws_route_table_association.public[1] will be created
+23:05:54.101 STDOUT terraform:   + resource "aws_route_table_association" "public" {
+23:05:54.101 STDOUT terraform:       + id             = (known after apply)
+23:05:54.101 STDOUT terraform:       + route_table_id = (known after apply)
+23:05:54.101 STDOUT terraform:       + subnet_id      = (known after apply)
+23:05:54.102 STDOUT terraform:     }
+23:05:54.102 STDOUT terraform:   # module.vpc.aws_subnet.private[0] will be created
+23:05:54.102 STDOUT terraform:   + resource "aws_subnet" "private" {
+23:05:54.102 STDOUT terraform:       + arn                                            = (known after apply)
+23:05:54.102 STDOUT terraform:       + assign_ipv6_address_on_creation                = false
+23:05:54.102 STDOUT terraform:       + availability_zone                              = "us-east-1a"
+23:05:54.102 STDOUT terraform:       + availability_zone_id                           = (known after apply)
+23:05:54.102 STDOUT terraform:       + cidr_block                                     = "10.0.0.0/20"
+23:05:54.102 STDOUT terraform:       + enable_dns64                                   = false
+23:05:54.102 STDOUT terraform:       + enable_resource_name_dns_a_record_on_launch    = false
+23:05:54.103 STDOUT terraform:       + enable_resource_name_dns_aaaa_record_on_launch = false
+23:05:54.103 STDOUT terraform:       + id                                             = (known after apply)
+23:05:54.103 STDOUT terraform:       + ipv6_cidr_block_association_id                 = (known after apply)
+23:05:54.103 STDOUT terraform:       + ipv6_native                                    = false
+23:05:54.103 STDOUT terraform:       + map_public_ip_on_launch                        = false
+23:05:54.103 STDOUT terraform:       + owner_id                                       = (known after apply)
+23:05:54.103 STDOUT terraform:       + private_dns_hostname_type_on_launch            = (known after apply)
+23:05:54.103 STDOUT terraform:       + tags                                           = {
+23:05:54.103 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.103 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private-us-east-1a"
+23:05:54.103 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.103 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.104 STDOUT terraform:           + "karpenter.sh/discovery"                  = "ex-aws-vpc-module"
+23:05:54.104 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.104 STDOUT terraform:           + "kubernetes.io/role/internal-elb"         = "1"
+23:05:54.104 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.104 STDOUT terraform:         }
+23:05:54.104 STDOUT terraform:       + tags_all                                       = {
+23:05:54.104 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.104 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private-us-east-1a"
+23:05:54.104 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.104 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.104 STDOUT terraform:           + "karpenter.sh/discovery"                  = "ex-aws-vpc-module"
+23:05:54.104 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.104 STDOUT terraform:           + "kubernetes.io/role/internal-elb"         = "1"
+23:05:54.104 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.105 STDOUT terraform:         }
+23:05:54.105 STDOUT terraform:       + vpc_id                                         = (known after apply)
+23:05:54.105 STDOUT terraform:     }
+23:05:54.105 STDOUT terraform:   # module.vpc.aws_subnet.private[1] will be created
+23:05:54.105 STDOUT terraform:   + resource "aws_subnet" "private" {
+23:05:54.105 STDOUT terraform:       + arn                                            = (known after apply)
+23:05:54.105 STDOUT terraform:       + assign_ipv6_address_on_creation                = false
+23:05:54.105 STDOUT terraform:       + availability_zone                              = "us-east-1c"
+23:05:54.105 STDOUT terraform:       + availability_zone_id                           = (known after apply)
+23:05:54.105 STDOUT terraform:       + cidr_block                                     = "10.0.16.0/20"
+23:05:54.105 STDOUT terraform:       + enable_dns64                                   = false
+23:05:54.105 STDOUT terraform:       + enable_resource_name_dns_a_record_on_launch    = false
+23:05:54.105 STDOUT terraform:       + enable_resource_name_dns_aaaa_record_on_launch = false
+23:05:54.105 STDOUT terraform:       + id                                             = (known after apply)
+23:05:54.105 STDOUT terraform:       + ipv6_cidr_block_association_id                 = (known after apply)
+23:05:54.105 STDOUT terraform:       + ipv6_native                                    = false
+23:05:54.106 STDOUT terraform:       + map_public_ip_on_launch                        = false
+23:05:54.106 STDOUT terraform:       + owner_id                                       = (known after apply)
+23:05:54.106 STDOUT terraform:       + private_dns_hostname_type_on_launch            = (known after apply)
+23:05:54.106 STDOUT terraform:       + tags                                           = {
+23:05:54.106 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.106 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private-us-east-1c"
+23:05:54.106 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.106 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.106 STDOUT terraform:           + "karpenter.sh/discovery"                  = "ex-aws-vpc-module"
+23:05:54.106 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.106 STDOUT terraform:           + "kubernetes.io/role/internal-elb"         = "1"
+23:05:54.106 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.106 STDOUT terraform:         }
+23:05:54.106 STDOUT terraform:       + tags_all                                       = {
+23:05:54.106 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.106 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-private-us-east-1c"
+23:05:54.107 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.107 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.107 STDOUT terraform:           + "karpenter.sh/discovery"                  = "ex-aws-vpc-module"
+23:05:54.107 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.107 STDOUT terraform:           + "kubernetes.io/role/internal-elb"         = "1"
+23:05:54.107 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.107 STDOUT terraform:         }
+23:05:54.107 STDOUT terraform:       + vpc_id                                         = (known after apply)
+23:05:54.107 STDOUT terraform:     }
+23:05:54.107 STDOUT terraform:   # module.vpc.aws_subnet.public[0] will be created
+23:05:54.107 STDOUT terraform:   + resource "aws_subnet" "public" {
+23:05:54.107 STDOUT terraform:       + arn                                            = (known after apply)
+23:05:54.107 STDOUT terraform:       + assign_ipv6_address_on_creation                = false
+23:05:54.107 STDOUT terraform:       + availability_zone                              = "us-east-1a"
+23:05:54.107 STDOUT terraform:       + availability_zone_id                           = (known after apply)
+23:05:54.108 STDOUT terraform:       + cidr_block                                     = "10.0.48.0/24"
+23:05:54.108 STDOUT terraform:       + enable_dns64                                   = false
+23:05:54.108 STDOUT terraform:       + enable_resource_name_dns_a_record_on_launch    = false
+23:05:54.288 STDOUT terraform:       + enable_resource_name_dns_aaaa_record_on_launch = false
+23:05:54.288 STDOUT terraform:       + id                                             = (known after apply)
+23:05:54.288 STDOUT terraform:       + ipv6_cidr_block_association_id                 = (known after apply)
+23:05:54.289 STDOUT terraform:       + ipv6_native                                    = false
+23:05:54.289 STDOUT terraform:       + map_public_ip_on_launch                        = false
+23:05:54.289 STDOUT terraform:       + owner_id                                       = (known after apply)
+23:05:54.289 STDOUT terraform:       + private_dns_hostname_type_on_launch            = (known after apply)
+23:05:54.289 STDOUT terraform:       + tags                                           = {
+23:05:54.289 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.289 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public-us-east-1a"
+23:05:54.289 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.289 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.289 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.289 STDOUT terraform:           + "kubernetes.io/role/elb"                  = "1"
+23:05:54.289 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.289 STDOUT terraform:         }
+23:05:54.289 STDOUT terraform:       + tags_all                                       = {
+23:05:54.290 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.290 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public-us-east-1a"
+23:05:54.290 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.290 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.290 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.290 STDOUT terraform:           + "kubernetes.io/role/elb"                  = "1"
+23:05:54.290 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.290 STDOUT terraform:         }
+23:05:54.290 STDOUT terraform:       + vpc_id                                         = (known after apply)
+23:05:54.290 STDOUT terraform:     }
+23:05:54.290 STDOUT terraform:   # module.vpc.aws_subnet.public[1] will be created
+23:05:54.290 STDOUT terraform:   + resource "aws_subnet" "public" {
+23:05:54.290 STDOUT terraform:       + arn                                            = (known after apply)
+23:05:54.291 STDOUT terraform:       + assign_ipv6_address_on_creation                = false
+23:05:54.291 STDOUT terraform:       + availability_zone                              = "us-east-1c"
+23:05:54.291 STDOUT terraform:       + availability_zone_id                           = (known after apply)
+23:05:54.291 STDOUT terraform:       + cidr_block                                     = "10.0.49.0/24"
+23:05:54.291 STDOUT terraform:       + enable_dns64                                   = false
+23:05:54.291 STDOUT terraform:       + enable_resource_name_dns_a_record_on_launch    = false
+23:05:54.291 STDOUT terraform:       + enable_resource_name_dns_aaaa_record_on_launch = false
+23:05:54.291 STDOUT terraform:       + id                                             = (known after apply)
+23:05:54.291 STDOUT terraform:       + ipv6_cidr_block_association_id                 = (known after apply)
+23:05:54.291 STDOUT terraform:       + ipv6_native                                    = false
+23:05:54.291 STDOUT terraform:       + map_public_ip_on_launch                        = false
+23:05:54.291 STDOUT terraform:       + owner_id                                       = (known after apply)
+23:05:54.291 STDOUT terraform:       + private_dns_hostname_type_on_launch            = (known after apply)
+23:05:54.292 STDOUT terraform:       + tags                                           = {
+23:05:54.292 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.292 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public-us-east-1c"
+23:05:54.292 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.292 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.292 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.292 STDOUT terraform:           + "kubernetes.io/role/elb"                  = "1"
+23:05:54.292 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.292 STDOUT terraform:         }
+23:05:54.292 STDOUT terraform:       + tags_all                                       = {
+23:05:54.292 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.292 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module-public-us-east-1c"
+23:05:54.292 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.292 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.293 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.293 STDOUT terraform:           + "kubernetes.io/role/elb"                  = "1"
+23:05:54.293 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.293 STDOUT terraform:         }
+23:05:54.293 STDOUT terraform:       + vpc_id                                         = (known after apply)
+23:05:54.293 STDOUT terraform:     }
+23:05:54.293 STDOUT terraform:   # module.vpc.aws_vpc.this[0] will be created
+23:05:54.293 STDOUT terraform:   + resource "aws_vpc" "this" {
+23:05:54.293 STDOUT terraform:       + arn                                  = (known after apply)
+23:05:54.293 STDOUT terraform:       + cidr_block                           = "10.0.0.0/16"
+23:05:54.293 STDOUT terraform:       + default_network_acl_id               = (known after apply)
+23:05:54.293 STDOUT terraform:       + default_route_table_id               = (known after apply)
+23:05:54.293 STDOUT terraform:       + default_security_group_id            = (known after apply)
+23:05:54.293 STDOUT terraform:       + dhcp_options_id                      = (known after apply)
+23:05:54.293 STDOUT terraform:       + enable_dns_hostnames                 = true
+23:05:54.293 STDOUT terraform:       + enable_dns_support                   = true
+23:05:54.293 STDOUT terraform:       + enable_network_address_usage_metrics = (known after apply)
+23:05:54.294 STDOUT terraform:       + id                                   = (known after apply)
+23:05:54.294 STDOUT terraform:       + instance_tenancy                     = "default"
+23:05:54.294 STDOUT terraform:       + ipv6_association_id                  = (known after apply)
+23:05:54.294 STDOUT terraform:       + ipv6_cidr_block                      = (known after apply)
+23:05:54.294 STDOUT terraform:       + ipv6_cidr_block_network_border_group = (known after apply)
+23:05:54.294 STDOUT terraform:       + main_route_table_id                  = (known after apply)
+23:05:54.294 STDOUT terraform:       + owner_id                             = (known after apply)
+23:05:54.294 STDOUT terraform:       + tags                                 = {
+23:05:54.294 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.294 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module"
+23:05:54.294 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.294 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.294 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.294 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.294 STDOUT terraform:         }
+23:05:54.294 STDOUT terraform:       + tags_all                             = {
+23:05:54.295 STDOUT terraform:           + "Environment"                             = "development"
+23:05:54.295 STDOUT terraform:           + "Name"                                    = "ex-aws-vpc-module"
+23:05:54.295 STDOUT terraform:           + "Terraform"                               = "true"
+23:05:54.295 STDOUT terraform:           + "cloudprovider"                           = "aws"
+23:05:54.295 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module" = "shared"
+23:05:54.295 STDOUT terraform:           + "owner"                                   = "devops-team"
+23:05:54.295 STDOUT terraform:         }
+23:05:54.295 STDOUT terraform:     }
+23:05:54.295 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_eks_node_group.this[0] will be created
+23:05:54.295 STDOUT terraform:   + resource "aws_eks_node_group" "this" {
+23:05:54.295 STDOUT terraform:       + ami_type               = "AL2_x86_64"
+23:05:54.295 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.295 STDOUT terraform:       + capacity_type          = "SPOT"
+23:05:54.295 STDOUT terraform:       + cluster_name           = "ex-aws-vpc-module"
+23:05:54.295 STDOUT terraform:       + disk_size              = (known after apply)
+23:05:54.295 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.296 STDOUT terraform:       + instance_types         = [
+23:05:54.296 STDOUT terraform:           + "t3.small",
+23:05:54.296 STDOUT terraform:         ]
+23:05:54.296 STDOUT terraform:       + labels                 = {
+23:05:54.296 STDOUT terraform:           + "colocho/GroupNode"    = "spot0"
+23:05:54.296 STDOUT terraform:           + "colocho/instanceType" = "t3.small"
+23:05:54.296 STDOUT terraform:         }
+23:05:54.296 STDOUT terraform:       + node_group_name        = (known after apply)
+23:05:54.296 STDOUT terraform:       + node_group_name_prefix = "spot0-"
+23:05:54.296 STDOUT terraform:       + node_role_arn          = (known after apply)
+23:05:54.296 STDOUT terraform:       + release_version        = (known after apply)
+23:05:54.296 STDOUT terraform:       + resources              = (known after apply)
+23:05:54.296 STDOUT terraform:       + status                 = (known after apply)
+23:05:54.296 STDOUT terraform:       + subnet_ids             = (known after apply)
+23:05:54.296 STDOUT terraform:       + tags                   = {
+23:05:54.296 STDOUT terraform:           + "Name"                                        = "spot0"
+23:05:54.296 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.296 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.297 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.297 STDOUT terraform:         }
+23:05:54.297 STDOUT terraform:       + tags_all               = {
+23:05:54.297 STDOUT terraform:           + "Name"                                        = "spot0"
+23:05:54.297 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.297 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.297 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.297 STDOUT terraform:         }
+23:05:54.297 STDOUT terraform:       + version                = "1.28"
+23:05:54.297 STDOUT terraform:       + launch_template {
+23:05:54.297 STDOUT terraform:           + id      = (known after apply)
+23:05:54.297 STDOUT terraform:           + name    = (known after apply)
+23:05:54.297 STDOUT terraform:           + version = (known after apply)
+23:05:54.297 STDOUT terraform:         }
+23:05:54.297 STDOUT terraform:       + node_repair_config (known after apply)
+23:05:54.298 STDOUT terraform:       + scaling_config {
+23:05:54.298 STDOUT terraform:           + desired_size = 1
+23:05:54.298 STDOUT terraform:           + max_size     = 3
+23:05:54.298 STDOUT terraform:           + min_size     = 1
+23:05:54.298 STDOUT terraform:         }
+23:05:54.298 STDOUT terraform:       + timeouts {}
+23:05:54.298 STDOUT terraform:       + update_config {
+23:05:54.298 STDOUT terraform:           + max_unavailable_percentage = 33
+23:05:54.298 STDOUT terraform:         }
+23:05:54.298 STDOUT terraform:     }
+23:05:54.298 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_iam_role.this[0] will be created
+23:05:54.298 STDOUT terraform:   + resource "aws_iam_role" "this" {
+23:05:54.298 STDOUT terraform:       + arn                   = (known after apply)
+23:05:54.298 STDOUT terraform:       + assume_role_policy    = jsonencode(
+23:05:54.298 STDOUT terraform:             {
+23:05:54.298 STDOUT terraform:               + Statement = [
+23:05:54.298 STDOUT terraform:                   + {
+23:05:54.298 STDOUT terraform:                       + Action    = "sts:AssumeRole"
+23:05:54.298 STDOUT terraform:                       + Effect    = "Allow"
+23:05:54.299 STDOUT terraform:                       + Principal = {
+23:05:54.299 STDOUT terraform:                           + Service = "ec2.amazonaws.com"
+23:05:54.299 STDOUT terraform:                         }
+23:05:54.299 STDOUT terraform:                       + Sid       = "EKSNodeAssumeRole"
+23:05:54.299 STDOUT terraform:                     },
+23:05:54.299 STDOUT terraform:                 ]
+23:05:54.299 STDOUT terraform:               + Version   = "2012-10-17"
+23:05:54.299 STDOUT terraform:             }
+23:05:54.299 STDOUT terraform:         )
+23:05:54.299 STDOUT terraform:       + create_date           = (known after apply)
+23:05:54.299 STDOUT terraform:       + description           = "EKS managed node group IAM role"
+23:05:54.299 STDOUT terraform:       + force_detach_policies = true
+23:05:54.299 STDOUT terraform:       + id                    = (known after apply)
+23:05:54.299 STDOUT terraform:       + managed_policy_arns   = (known after apply)
+23:05:54.299 STDOUT terraform:       + max_session_duration  = 3600
+23:05:54.299 STDOUT terraform:       + name                  = (known after apply)
+23:05:54.299 STDOUT terraform:       + name_prefix           = "spot0-eks-node-group-"
+23:05:54.299 STDOUT terraform:       + path                  = "/"
+23:05:54.300 STDOUT terraform:       + tags                  = {
+23:05:54.300 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.300 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.300 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.300 STDOUT terraform:         }
+23:05:54.300 STDOUT terraform:       + tags_all              = {
+23:05:54.300 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.300 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.300 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.300 STDOUT terraform:         }
+23:05:54.300 STDOUT terraform:       + unique_id             = (known after apply)
+23:05:54.300 STDOUT terraform:       + inline_policy (known after apply)
+23:05:54.301 STDOUT terraform:     }
+23:05:54.301 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"] will be created
+23:05:54.301 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "this" {
+23:05:54.301 STDOUT terraform:       + id         = (known after apply)
+23:05:54.301 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+23:05:54.301 STDOUT terraform:       + role       = (known after apply)
+23:05:54.301 STDOUT terraform:     }
+23:05:54.301 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_iam_role_policy_attachment.this["arn:a
+23:05:54.301 STDOUT terraform: ws:iam::aws:policy/AmazonEKSWorkerNodePolicy"] will be created
+23:05:54.301 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "this" {
+23:05:54.301 STDOUT terraform:       + id         = (known after apply)
+23:05:54.301 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+23:05:54.301 STDOUT terraform:       + role       = (known after apply)
+23:05:54.301 STDOUT terraform:     }
+23:05:54.301 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"] will be created
+23:05:54.302 STDOUT terraform:   + resource "aws_iam_role_policy_attachment" "this" {
+23:05:54.302 STDOUT terraform:       + id         = (known after apply)
+23:05:54.302 STDOUT terraform:       + policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+23:05:54.302 STDOUT terraform:       + role       = (known after apply)
+23:05:54.302 STDOUT terraform:     }
+23:05:54.302 STDOUT terraform:   # module.eks[0].module.eks_managed_node_group["spot0"].aws_launch_template.this[0] will be created
+23:05:54.302 STDOUT terraform:   + resource "aws_launch_template" "this" {
+23:05:54.302 STDOUT terraform:       + arn                    = (known after apply)
+23:05:54.302 STDOUT terraform:       + default_version        = (known after apply)
+23:05:54.302 STDOUT terraform:       + description            = "Custom launch template for spot0 EKS managed node group"
+23:05:54.302 STDOUT terraform:       + id                     = (known after apply)
+23:05:54.302 STDOUT terraform:       + latest_version         = (known after apply)
+23:05:54.302 STDOUT terraform:       + name                   = (known after apply)
+23:05:54.302 STDOUT terraform:       + name_prefix            = "spot0-"
+23:05:54.302 STDOUT terraform:       + tags                   = {
+23:05:54.302 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.302 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.302 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.302 STDOUT terraform:         }
+23:05:54.302 STDOUT terraform:       + tags_all               = {
+23:05:54.303 STDOUT terraform:           + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.303 STDOUT terraform:           + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.303 STDOUT terraform:           + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.303 STDOUT terraform:         }
+23:05:54.303 STDOUT terraform:       + update_default_version = true
+23:05:54.303 STDOUT terraform:       + vpc_security_group_ids = (known after apply)
+23:05:54.303 STDOUT terraform:         # (2 unchanged attributes hidden)
+23:05:54.303 STDOUT terraform:       + metadata_options {
+23:05:54.303 STDOUT terraform:           + http_endpoint               = "enabled"
+23:05:54.303 STDOUT terraform:           + http_protocol_ipv6          = (known after apply)
+23:05:54.303 STDOUT terraform:           + http_put_response_hop_limit = 2
+23:05:54.303 STDOUT terraform:           + http_tokens                 = "required"
+23:05:54.303 STDOUT terraform:           + instance_metadata_tags      = (known after apply)
+23:05:54.303 STDOUT terraform:         }
+23:05:54.303 STDOUT terraform:       + monitoring {
+23:05:54.303 STDOUT terraform:           + enabled = true
+23:05:54.303 STDOUT terraform:         }
+23:05:54.303 STDOUT terraform:       + tag_specifications {
+23:05:54.303 STDOUT terraform:           + resource_type = "instance"
+23:05:54.303 STDOUT terraform:           + tags          = {
+23:05:54.303 STDOUT terraform:               + "Name"                                        = "spot0"
+23:05:54.304 STDOUT terraform:               + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.304 STDOUT terraform:               + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.304 STDOUT terraform:               + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.304 STDOUT terraform:             }
+23:05:54.304 STDOUT terraform:         }
+23:05:54.304 STDOUT terraform:       + tag_specifications {
+23:05:54.304 STDOUT terraform:           + resource_type = "network-interface"
+23:05:54.304 STDOUT terraform:           + tags          = {
+23:05:54.304 STDOUT terraform:               + "Name"                                        = "spot0"
+23:05:54.304 STDOUT terraform:               + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.304 STDOUT terraform:               + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.304 STDOUT terraform:               + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.304 STDOUT terraform:             }
+23:05:54.304 STDOUT terraform:         }
+23:05:54.304 STDOUT terraform:       + tag_specifications {
+23:05:54.304 STDOUT terraform:           + resource_type = "volume"
+23:05:54.304 STDOUT terraform:           + tags          = {
+23:05:54.304 STDOUT terraform:               + "Name"                                        = "spot0"
+23:05:54.305 STDOUT terraform:               + "k8s.io/cluster-autoscaler/enabled"           = "true"
+23:05:54.305 STDOUT terraform:               + "k8s.io/cluster-autoscaler/ex-aws-vpc-module" = "owned"
+23:05:54.305 STDOUT terraform:               + "kubernetes.io/cluster/ex-aws-vpc-module"     = "owned"
+23:05:54.305 STDOUT terraform:             }
+23:05:54.305 STDOUT terraform:         }
+23:05:54.305 STDOUT terraform:     }
+23:05:54.305 STDOUT terraform: Plan: 60 to add, 0 to change, 0 to destroy.
+23:05:54.305 STDOUT terraform: 
+23:05:54.305 STDOUT terraform: Changes to Outputs:
+23:05:54.305 STDOUT terraform:   + available_zones           = [
+23:05:54.305 STDOUT terraform:       + "us-east-1a",
+23:05:54.305 STDOUT terraform:       + "us-east-1c",
+23:05:54.305 STDOUT terraform:     ]
+23:05:54.306 STDOUT terraform:   + cluster_ca_certificate    = (known after apply)
+23:05:54.306 STDOUT terraform:   + cluster_endpoint          = (known after apply)
+23:05:54.306 STDOUT terraform:   + cluster_name              = "ex-aws-vpc-module"
+23:05:54.306 STDOUT terraform:   + cluster_oidc_issuer_url   = (known after apply)
+23:05:54.306 STDOUT terraform:   + private_subnets           = [
+23:05:54.306 STDOUT terraform:       + (known after apply),
+23:05:54.306 STDOUT terraform:       + (known after apply),
+23:05:54.306 STDOUT terraform:     ]
+23:05:54.306 STDOUT terraform:   + private_subnets_cidrrange = [
+23:05:54.306 STDOUT terraform:       + "10.0.0.0/20",
+23:05:54.306 STDOUT terraform:       + "10.0.16.0/20",
+23:05:54.306 STDOUT terraform:     ]
+23:05:54.306 STDOUT terraform:   + public_subnets            = [
+23:05:54.307 STDOUT terraform:       + (known after apply),
+23:05:54.307 STDOUT terraform:       + (known after apply),
+23:05:54.307 STDOUT terraform:     ]
+23:05:54.307 STDOUT terraform:   + public_subnets_cidrrange  = [
+23:05:54.307 STDOUT terraform:       + "10.0.48.0/24",
+23:05:54.307 STDOUT terraform:       + "10.0.49.0/24",
+23:05:54.307 STDOUT terraform:     ]
+23:05:54.307 STDOUT terraform:   + vpc_id                    = (known after apply)
+23:05:54.307 STDOUT terraform: ╷
+23:05:54.307 STDOUT terraform: │ Warning: Argument is deprecated
+23:05:54.307 STDOUT terraform: │ 
+23:05:54.307 STDOUT terraform: │   with module.eks[0].aws_iam_role.this[0],
+23:05:54.307 STDOUT terraform: │   on .terraform/modules/eks/main.tf line 387, in resource "aws_iam_role" "this":
+23:05:54.307 STDOUT terraform: │  387: resource "aws_iam_role" "this" {
+23:05:54.307 STDOUT terraform: │ 
+23:05:54.307 STDOUT terraform: │ inline_policy is deprecated. Use the aws_iam_role_policy resource instead.
+23:05:54.307 STDOUT terraform: │ If Terraform should exclusively manage all inline policy associations (the
+23:05:54.307 STDOUT terraform: │ current behavior of this argument), use the aws_iam_role_policies_exclusive
+23:05:54.307 STDOUT terraform: │ resource as well.
+23:05:54.307 STDOUT terraform: ╵
+23:05:54.307 STDOUT terraform: 
+23:05:54.307 STDOUT terraform: ─────────────────────────────────────────────────────────────────────────────
+23:05:54.308 STDOUT terraform: Note: You didn't use the -out option to save this plan, so Terraform can't
+23:05:54.308 STDOUT terraform: guarantee to take exactly these actions if you run "terraform apply" now.

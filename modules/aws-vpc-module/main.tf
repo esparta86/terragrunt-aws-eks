@@ -4,26 +4,26 @@
 # ################################################################################
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
-  # version = "5.21.0"
-  version = "6.1.0"
-  name =  local.name
-  cidr =  var.vpc_cidr
-  azs =  local.list_azs
+  version = "5.21.0"
+  # version         = "6.1.0"
+  name            = local.name
+  cidr            = var.vpc_cidr
+  azs             = local.list_azs
   private_subnets = local.private_subnets
-  public_subnets = local.public_subnets
+  public_subnets  = local.public_subnets
   # intra_subnets = local.intra_subnets
 
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  enable_nat_gateway     = true
+  single_nat_gateway     = true
   one_nat_gateway_per_az = false
 
   public_subnet_tags = {
-     "kubernetes.io/role/elb" = 1
+    "kubernetes.io/role/elb" = 1
   }
 
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1
-    "karpenter.sh/discovery" = local.name
+    "karpenter.sh/discovery"          = local.name
   }
 
   tags = merge(var.default_tags, {
@@ -31,154 +31,154 @@ module "vpc" {
   })
 
   default_network_acl_ingress = []
-  manage_default_network_acl = false
+  manage_default_network_acl  = false
 
 }
 locals {
 
   map_efs_addon = var.enable_efs_csi_driver ? {
     "efs-csi-driver" = {
-            addon_version = var.efs_csi_driver_addon_version 
-            preserve = true
-            most_recent = true
-            timeouts = {
-                create = "25m"
-                delete = "10m"
-            }
-            service_account_role_arn = "${aws_iam_role.efs_csi_role[0].arn}"
+      addon_version = var.efs_csi_driver_addon_version
+      preserve      = true
+      most_recent   = true
+      timeouts = {
+        create = "25m"
+        delete = "10m"
+      }
+      service_account_role_arn = "${aws_iam_role.efs_csi_role[0].arn}"
     }
   } : {}
 
   map_ebs_addon = var.enable_ebs_csi_driver ? {
     "aws-ebs-csi-driver" = {
-        addon_version = "v1.42.0-eksbuild.1"
-        preserve = true
-        most_recent = true
-        timeouts = {
-            create = "25m"
-            delete = "10m"
-        }
-        service_account_role_arn = "${aws_iam_role.ebs_csi_role[0].arn}"
+      addon_version = "v1.42.0-eksbuild.1"
+      preserve      = true
+      most_recent   = true
+      timeouts = {
+        create = "25m"
+        delete = "10m"
+      }
+      service_account_role_arn = "${aws_iam_role.ebs_csi_role[0].arn}"
     }
   } : {}
-  
+
 }
 # ################################################################################
 # # EKS Module
 # ################################################################################
 
 module "eks" {
-    count = var.create_eks ? 1 : 0
-    source  = "terraform-aws-modules/eks/aws"
-    version = "21.00.0"
+  count   = var.create_eks ? 1 : 0
+  source  = "terraform-aws-modules/eks/aws"
+  version = "20.5.0"
 
-    name = local.name
-    kubernetes_version  = var.cluster_version
-    endpoint_public_access  = true
-    # cluster_endpoint_private_access = true
+  cluster_name                   = local.name
+  cluster_version                = var.cluster_version
+  cluster_endpoint_public_access = true
+  # cluster_endpoint_private_access = true
 
-    security_group_tags = var.cluster_sg_tags
-    node_security_group_tags = var.cluster_sg_tags
-    # authentication_mode = "CONFIG_MAP"
+  cluster_security_group_tags = var.cluster_sg_tags
+  node_security_group_tags    = var.cluster_sg_tags
+  # authentication_mode = "CONFIG_MAP"
 
-    addons = merge({
-        coredns = {
-            # addon_version = "v1.11.4-eksbuild.14"
-            # preserve = true
-            # most_recent = true
+  cluster_addons = merge({
+    coredns = {
+      # addon_version = "v1.11.4-eksbuild.14"
+      # preserve = true
+      # most_recent = true
 
-            timeouts = {
-                create = "10m"
-                delete = "10m"
-                update = "10m"
-            }
-        }
-
-        kube-proxy = {
-            addon_version = "v1.28.15-eksbuild.31"
-            # most_recent = true
-        }
-
-        vpc-cni = {
-          #  preserve = true
-          #  most_recent = true
-          before_compute = true
-          addon_version = "v1.19.6-eksbuild.7"
-           timeouts = {
-             create = "25m"
-             delete = "10m"
-           }
-          # No required so far
-          #  configuration_values = jsonencode({
-          #     "enableNetworkPolicy": "true",
-          #     "nodeAgent": {
-          #         "healthProbeBindAddr": "8163",
-          #         "metricsBindAddr": "8162"
-          #     }
-          #   })
-        }
-
-        # aws-ebs-csi-driver ={
-        #    preserve = true
-        #    most_recent = true
-        #    timeouts = {
-        #      create = "25m"
-        #      delete = "10m"
-        #    }
-        #    service_account_role_arn = "${aws_iam_role.ebs_csi_role.arn}"
-
-        # }
-
-        # aws-efs-csi-driver = {
-        #     preserve = true
-        #     most_recent = true
-        #     timeouts = {
-        #         create = "25m"
-        #         delete = "10m"
-        #     }
-        #     service_account_role_arn = "${aws_iam_role.efs_csi_role[0].arn}"
-        # }
-
-
-
-
-    },local.map_efs_addon, local.map_ebs_addon)
-
-    create_kms_key = false
-    iam_role_use_name_prefix  = true
-
-    # Version 20.0.0 BREAKING CHANGES
-    # manage_aws_auth_configmap = true
-    # aws_auth_roles = var.map_roles_aws
-
-
-    encryption_config = {
-        resources = ["secrets"]
-        //provider_key_arn = module.kms.key_arn
-        provider_key_arn = aws_kms_key.eks.arn
+      timeouts = {
+        create = "10m"
+        delete = "10m"
+        update = "10m"
+      }
     }
 
-    timeouts = {
-      create = lookup(var.eks_timeout,"create",null)
-      update = lookup(var.eks_timeout,"update",null)
-      delete = lookup(var.eks_timeout,"delete",null)
+    kube-proxy = {
+      addon_version = "v1.28.15-eksbuild.31"
+      # most_recent = true
     }
 
-    # iam_role_additional_policies = {
-    #     additional = aws_iam_policy.additional.arn
+    vpc-cni = {
+      #  preserve = true
+      #  most_recent = true
+      before_compute = true
+      addon_version  = "v1.19.6-eksbuild.7"
+      timeouts = {
+        create = "25m"
+        delete = "10m"
+      }
+      # No required so far
+      #  configuration_values = jsonencode({
+      #     "enableNetworkPolicy": "true",
+      #     "nodeAgent": {
+      #         "healthProbeBindAddr": "8163",
+      #         "metricsBindAddr": "8162"
+      #     }
+      #   })
+    }
+
+    # aws-ebs-csi-driver ={
+    #    preserve = true
+    #    most_recent = true
+    #    timeouts = {
+    #      create = "25m"
+    #      delete = "10m"
+    #    }
+    #    service_account_role_arn = "${aws_iam_role.ebs_csi_role.arn}"
+
     # }
 
-    # iam_role_additional_policies = {
-    #   "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-    #   }# ,aws_iam_policy.additional.arn]
+    # aws-efs-csi-driver = {
+    #     preserve = true
+    #     most_recent = true
+    #     timeouts = {
+    #         create = "25m"
+    #         delete = "10m"
+    #     }
+    #     service_account_role_arn = "${aws_iam_role.efs_csi_role[0].arn}"
+    # }
 
-    vpc_id = module.vpc.vpc_id
-    subnet_ids = module.vpc.private_subnets
 
-    endpoint_public_access_cidrs = var.eks_endpoint_public_cidrs
 
-    enable_cluster_creator_admin_permissions = true
-  security_group_additional_rules = {
+
+  }, local.map_efs_addon, local.map_ebs_addon)
+
+  create_kms_key           = false
+  iam_role_use_name_prefix = true
+
+  # Version 20.0.0 BREAKING CHANGES
+  # manage_aws_auth_configmap = true
+  # aws_auth_roles = var.map_roles_aws
+
+
+  cluster_encryption_config = {
+    resources = ["secrets"]
+    //provider_key_arn = module.kms.key_arn
+    provider_key_arn = aws_kms_key.eks.arn
+  }
+
+  cluster_timeouts = {
+    create = lookup(var.eks_timeout, "create", null)
+    update = lookup(var.eks_timeout, "update", null)
+    delete = lookup(var.eks_timeout, "delete", null)
+  }
+
+  # iam_role_additional_policies = {
+  #     additional = aws_iam_policy.additional.arn
+  # }
+
+  # iam_role_additional_policies = {
+  #   "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  #   }# ,aws_iam_policy.additional.arn]
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+
+  cluster_endpoint_public_access_cidrs = var.eks_endpoint_public_cidrs
+
+  enable_cluster_creator_admin_permissions = true
+  cluster_security_group_additional_rules = {
     ingress_nodes_ephemeral_ports_tcp = {
       description                = "Nodes on ephemeral ports"
       protocol                   = "tcp"
@@ -199,7 +199,7 @@ module "eks" {
   }
 
 
-    # Extend node-to-node security group rules
+  # Extend node-to-node security group rules
   node_security_group_additional_rules = {
     ingress_self_all = {
       description = "Node to node all ports/protocols"
@@ -211,11 +211,11 @@ module "eks" {
     }
 
     ingress_15017 = {
-      description = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
-      protocol = "TCP"
-      from_port = 15017
-      to_port = 15017
-      type = "ingress"
+      description                   = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
+      protocol                      = "TCP"
+      from_port                     = 15017
+      to_port                       = 15017
+      type                          = "ingress"
       source_cluster_security_group = true
     }
 
@@ -273,28 +273,28 @@ module "eks" {
 
   # }
 
-  eks_managed_node_groups  = {
-  //local.eks_managed_ng
+  eks_managed_node_groups = {
+    //local.eks_managed_ng
 
     spot0 = {
-        name = "spot0"
-        min_size = 1
-        max_size = 3
-        desired_size = 1
-        capacity_type = "SPOT"
-        instance_types = ["t3.small"]
-        ami_type = "AL2_x86_64"
-        use_latest_ami_release_version = false
+      name                           = "spot0"
+      min_size                       = 1
+      max_size                       = 3
+      desired_size                   = 1
+      capacity_type                  = "SPOT"
+      instance_types                 = ["t3.small"]
+      ami_type                       = "AL2_x86_64"
+      use_latest_ami_release_version = false
 
-        labels = {
-          "colocho/GroupNode" = "spot0"
-          "colocho/instanceType"    = "t3.small"
-        }
-        tags = {
-          "kubernetes.io/cluster/${local.name}" = "owned"
-          "k8s.io/cluster-autoscaler/${local.name}" = "owned"
-          "k8s.io/cluster-autoscaler/enabled" = "true"
-        }        
+      labels = {
+        "colocho/GroupNode"    = "spot0"
+        "colocho/instanceType" = "t3.small"
+      }
+      tags = {
+        "kubernetes.io/cluster/${local.name}"     = "owned"
+        "k8s.io/cluster-autoscaler/${local.name}" = "owned"
+        "k8s.io/cluster-autoscaler/enabled"       = "true"
+      }
     }
 
     # spot2 = {
@@ -317,65 +317,65 @@ module "eks" {
     #     ]
     # }
     # spot = {
-        # pre_bootstrap_user_data = <<-EOT
-        # #!/bin/bash
-        # set -ex
-        # cat <<-EOF > /etc/profile.d/bootstrap.sh
-        #   export KUBELET_EXTRA_ARGS="--node-labels=node.kubernetes.io/lifecycle=spot "
-        # EOF
-        #   sed -i '/^set -o errexit/a\\nsource /etc/profile.d/bootstrap.sh' /etc/eks/bootstrap.sh
-        # EOT
-        # enable_bootstrap_user_data = true
-        # pre_bootstrap_user_data = <<-EOT
-        #   echo "foo"
-        #   export FOO=bar
-        # EOT
-        # bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
-        # platform = "al2023"
-        # ami_type = "AL2023_x86_64_STANDARD"
-        # name = "spot"
-        # min_size = 2
-        # max_size = 5
-        # desired_size = 2
-        # capacity_type = "SPOT"
-        # instance_types = ["t3.small"]
-        
+    # pre_bootstrap_user_data = <<-EOT
+    # #!/bin/bash
+    # set -ex
+    # cat <<-EOF > /etc/profile.d/bootstrap.sh
+    #   export KUBELET_EXTRA_ARGS="--node-labels=node.kubernetes.io/lifecycle=spot "
+    # EOF
+    #   sed -i '/^set -o errexit/a\\nsource /etc/profile.d/bootstrap.sh' /etc/eks/bootstrap.sh
+    # EOT
+    # enable_bootstrap_user_data = true
+    # pre_bootstrap_user_data = <<-EOT
+    #   echo "foo"
+    #   export FOO=bar
+    # EOT
+    # bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
+    # platform = "al2023"
+    # ami_type = "AL2023_x86_64_STANDARD"
+    # name = "spot"
+    # min_size = 2
+    # max_size = 5
+    # desired_size = 2
+    # capacity_type = "SPOT"
+    # instance_types = ["t3.small"]
 
-        # cloudinit_pre_nodeadm = [
-        #   {
-        #     content_type = "application/node.eks.aws"
-        #     content      = <<-EOT
-        #       ---
-        #       apiVersion: node.eks.aws/v1alpha1
-        #       kind: NodeConfig
-        #       spec:
-        #         kubelet:
-        #           config:
-        #             shutdownGracePeriod: 30s
-        #             featureGates:
-        #               PersistentVolumeLastPhaseTransitionTime: false
-        #     EOT
-        #   }
-        # ]
-        # labels = {
-        #   "colocho/GroupNode" = "Compute1"
-        #   "colocho/instanceType"    = "t3.small"
-        # }
-        # tags = {
-        #   "kubernetes.io/cluster/${local.name}" = "owned"
-        #   "k8s.io/cluster-autoscaler/${local.name}" = "owned"
-        #   "k8s.io/cluster-autoscaler/enabled" = "true"
-        # }
-        # taints = [
-        #   {
-        #     key   = "dedicated"
-        #     value = "gpuGroup"
-        #     effect = "NO_SCHEDULE"
-        #   }
-        # ]
-        # create_iam_role          =  true #default true
-        # iam_role_name            = "spot-eks-node-group"
-        # iam_role_use_name_prefix = true
+
+    # cloudinit_pre_nodeadm = [
+    #   {
+    #     content_type = "application/node.eks.aws"
+    #     content      = <<-EOT
+    #       ---
+    #       apiVersion: node.eks.aws/v1alpha1
+    #       kind: NodeConfig
+    #       spec:
+    #         kubelet:
+    #           config:
+    #             shutdownGracePeriod: 30s
+    #             featureGates:
+    #               PersistentVolumeLastPhaseTransitionTime: false
+    #     EOT
+    #   }
+    # ]
+    # labels = {
+    #   "colocho/GroupNode" = "Compute1"
+    #   "colocho/instanceType"    = "t3.small"
+    # }
+    # tags = {
+    #   "kubernetes.io/cluster/${local.name}" = "owned"
+    #   "k8s.io/cluster-autoscaler/${local.name}" = "owned"
+    #   "k8s.io/cluster-autoscaler/enabled" = "true"
+    # }
+    # taints = [
+    #   {
+    #     key   = "dedicated"
+    #     value = "gpuGroup"
+    #     effect = "NO_SCHEDULE"
+    #   }
+    # ]
+    # create_iam_role          =  true #default true
+    # iam_role_name            = "spot-eks-node-group"
+    # iam_role_use_name_prefix = true
 
     #         iam_role_additional_policies = {
     #   additional = aws_iam_policy.additional.arn
@@ -384,7 +384,7 @@ module "eks" {
     #  }
 
     # storage = {
- 
+
     #     platform = "al2023"
     #     ami_type = "AL2023_x86_64_STANDARD"
     #     min_size = 1
@@ -403,64 +403,64 @@ module "eks" {
     #       "k8s.io/cluster-autoscaler/enabled" = "true"
     #     }        
     # }
-       
-    
-  #   spot2 = {
-  #     min_size = 1
-  #     max_size = 1
-  #     desired_size =1
-  #     capacity_type = "SPOT"
-
-  #     labels = {
-  #       Environment = "nonprd"
-  #       nodeGroupName = "spot2"
-  #     }
-
-  #   }
-
-  #   #     spotb = {
-  #   #     ami_id = data.aws_ami.eks_default.image_id
-  #   #     ami_type = "CUSTOM"
-  #   #     # enable_bootstrap_user_data = true
-  #   #     # pre_bootstrap_user_data = <<-EOT
-  #   #     #   echo "foo"
-  #   #     #   export FOO=bar
-  #   #     # EOT
-  #   #     # bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
-  #   #     min_size = 1
-  #   #     max_size = 1
-  #   #     desired_size = 1
-  #   #     capacity_type = "SPOT"
-  #   # }
-
-  #   #  spotc = {
-  #   #     user_data_template_path = "${path.module}/templates/linux_custom.tpl"
-  #   #     min_size = 1
-  #   #     max_size = 1
-  #   #     desired_size = 1
-  #   #     capacity_type = "ON_DEMAND"
-  #   #     pre_bootstrap_user_data = <<-EOT
-  #   #       echo "foo"
-  #   #       export FOO=bar
-  #   #     EOT
-  #   #     bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
-  #   #     post_bootstrap_user_data    = <<-EOT
-  #   #     cd /tmp
-  #   #     # To enable session manager
-  #   #     sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-  #   #     sudo systemctl enable amazon-ssm-agent
-  #   #     sudo systemctl start amazon-ssm-agent
-  #   #     EOT
-
-  #   #  }
 
 
+    #   spot2 = {
+    #     min_size = 1
+    #     max_size = 1
+    #     desired_size =1
+    #     capacity_type = "SPOT"
+
+    #     labels = {
+    #       Environment = "nonprd"
+    #       nodeGroupName = "spot2"
+    #     }
+
+    #   }
+
+    #   #     spotb = {
+    #   #     ami_id = data.aws_ami.eks_default.image_id
+    #   #     ami_type = "CUSTOM"
+    #   #     # enable_bootstrap_user_data = true
+    #   #     # pre_bootstrap_user_data = <<-EOT
+    #   #     #   echo "foo"
+    #   #     #   export FOO=bar
+    #   #     # EOT
+    #   #     # bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
+    #   #     min_size = 1
+    #   #     max_size = 1
+    #   #     desired_size = 1
+    #   #     capacity_type = "SPOT"
+    #   # }
+
+    #   #  spotc = {
+    #   #     user_data_template_path = "${path.module}/templates/linux_custom.tpl"
+    #   #     min_size = 1
+    #   #     max_size = 1
+    #   #     desired_size = 1
+    #   #     capacity_type = "ON_DEMAND"
+    #   #     pre_bootstrap_user_data = <<-EOT
+    #   #       echo "foo"
+    #   #       export FOO=bar
+    #   #     EOT
+    #   #     bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
+    #   #     post_bootstrap_user_data    = <<-EOT
+    #   #     cd /tmp
+    #   #     # To enable session manager
+    #   #     sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+    #   #     sudo systemctl enable amazon-ssm-agent
+    #   #     sudo systemctl start amazon-ssm-agent
+    #   #     EOT
+
+    #   #  }
 
 
 
-  # #  aws_auth_roles = var.map_roles_aws
 
-   }
+
+    # #  aws_auth_roles = var.map_roles_aws
+
+  }
 
 
 }
@@ -489,7 +489,7 @@ resource "aws_kms_key" "eks" {
 # data "aws_ami" "eks_default" {
 #   filter {
 #     name   = "name"
-  #     values = ["amazon-eks-node-${var.cluster_version}-v*"]
+#     values = ["amazon-eks-node-${var.cluster_version}-v*"]
 #   }
 
 #   most_recent = true
@@ -498,13 +498,13 @@ resource "aws_kms_key" "eks" {
 
 
 
- module "eks-auth" {
-  count = var.create_eks ? 1 : 0
+module "eks-auth" {
+  count   = var.create_eks ? 1 : 0
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.5.0"
 
   manage_aws_auth_configmap = true
-  aws_auth_roles = var.map_roles_aws
-  depends_on = [ module.eks ]
+  aws_auth_roles            = var.map_roles_aws
+  depends_on                = [module.eks]
 
- }
+}
