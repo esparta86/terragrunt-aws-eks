@@ -27,5 +27,5 @@ inputs = {
   cluster_name                            = dependency.aws-vpc-module.outputs.cluster_name
   cluster_oidc_issuer_url                 = dependency.aws-vpc-module.outputs.cluster_oidc_issuer_url
   cluster_autoscaler_service_account_name = "cluster-cus-autoscaler"
-  cluster_autoscaler_chart_version        = "9.34.0" #eks 1.28 compatible
+  cluster_autoscaler_chart_version        = "9.35.0" #eks 1.28 compatible
 }

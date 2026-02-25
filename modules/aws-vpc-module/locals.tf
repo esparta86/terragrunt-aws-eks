@@ -12,7 +12,7 @@ locals {
 #   0  0  0  0 - 0  0  0  0  0  0  0  0
 #  2048   1024    512  256     128   64   32   16   8   4   2   1
   private_subnets = [ for i,v in local.list_azs : cidrsubnet(var.vpc_cidr,4,i)]
-  public_subnets   = [ for i,v in local.list_azs : cidrsubnet(var.vpc_cidr,8, i+48) ]
+  public_subnets   = [ for i,v in local.list_azs : cidrsubnet(var.vpc_cidr,8, i+64) ]
   # intra_subnets =   [ for i,v in local.list_azs: cidrsubnet(var.vpc_cidr,8,i+52)]
   name = "ex-${var.module_name}"
   primary_l = {

@@ -6,7 +6,7 @@ resource "aws_vpc" "main_vpc" {
 
 
   tags = merge(var.default_tags, {
-    Name = "ste-use1-1"
+    Name = "col8-use1-1"
   })
 }
 
@@ -224,7 +224,7 @@ resource "aws_eip" "ip_nat2" {
 }
 
 resource "aws_eip" "ip_nat" {
-  count = var.required_private_subnets ? 1 : 0
+  count = var.required_private_subnets && var.required_nat_main_vpc ? 1 : 0
   # vpc = true
   domain = "vpc"
   tags = merge(var.default_tags,{
@@ -241,7 +241,7 @@ resource "aws_eip" "ip_nat" {
 # - You need to update the route table of the private subnet hosting the EC2 instances that need internet access
 
 resource "aws_nat_gateway" "nat_gateway" {
-  count = var.required_private_subnets ? 1 : 0
+  count = var.required_private_subnets && var.required_nat_main_vpc ? 1 : 0
   allocation_id = aws_eip.ip_nat[0].id
   subnet_id = element(aws_subnet.public_subnet.*.id,0)
   tags = merge(var.default_tags,{
@@ -278,7 +278,7 @@ locals {
 #Route table for private subnets
 # @default_tags contains default tags to inject into resources
 resource "aws_route_table" "private_rt" {
-  count = var.required_private_subnets ? 1 : 0
+  count = var.required_private_subnets && var.required_nat_main_vpc ? 1 : 0
   vpc_id = aws_vpc.main_vpc.id
   route  {
     cidr_block = "0.0.0.0/0"
@@ -309,13 +309,13 @@ resource "aws_route_table" "private_rt2" {
 
 #Route table Association with private Subnets
 resource "aws_route_table_association" "private_rt_association" {
-  count = var.required_private_subnets ? 1 : 0
+  count = var.required_private_subnets && var.required_nat_main_vpc ? 1 : 0
   subnet_id = aws_subnet.private_subnet[0].id
   route_table_id = aws_route_table.private_rt[0].id
 }
 
 resource "aws_route_table_association" "private_rt_association2" {
-  count = var.required_private_subnets ? 1 : 0
+  count = var.required_private_subnets && var.required_nat_main_vpc ? 1 : 0
   subnet_id = aws_subnet.private_subnet2[0].id
   route_table_id = aws_route_table.private_rt[0].id
 }

@@ -38,9 +38,8 @@ locals {
 
   map_efs_addon = var.enable_efs_csi_driver ? {
     "efs-csi-driver" = {
-            addon_version = var.efs_csi_driver_addon_version 
-            preserve = true
-            most_recent = true
+            addon_version = var.efs_csi_driver_addon_version
+            # most_recent = true
             timeouts = {
                 create = "25m"
                 delete = "10m"
@@ -52,8 +51,7 @@ locals {
   map_ebs_addon = var.enable_ebs_csi_driver ? {
     "aws-ebs-csi-driver" = {
         addon_version = "v1.42.0-eksbuild.1"
-        preserve = true
-        most_recent = true
+        # most_recent = true
         timeouts = {
             create = "25m"
             delete = "10m"
@@ -70,7 +68,7 @@ locals {
 module "eks" {
     count = var.create_eks ? 1 : 0
     source  = "terraform-aws-modules/eks/aws"
-    version = "21.00.0"
+    version = "21.0.1"
 
     name = local.name
     kubernetes_version  = var.cluster_version
@@ -83,7 +81,9 @@ module "eks" {
 
     addons = merge({
         coredns = {
-            # addon_version = "v1.11.4-eksbuild.14"
+            addon_version = "v1.11.4-eksbuild.14"
+            resolve_conflicts_on_create = "OVERWRITE"
+            resolve_conflicts_on_update = "OVERWRITE"
             # preserve = true
             # most_recent = true
 
@@ -95,7 +95,10 @@ module "eks" {
         }
 
         kube-proxy = {
-            addon_version = "v1.28.15-eksbuild.31"
+            # addon_version = "v1.31.10-eksbuild.2"
+            addon_version = "v1.29.15-eksbuild.28"
+            resolve_conflicts_on_create = "OVERWRITE"
+            resolve_conflicts_on_update = "OVERWRITE"            
             # most_recent = true
         }
 
@@ -109,13 +112,19 @@ module "eks" {
              delete = "10m"
            }
           # No required so far
-          #  configuration_values = jsonencode({
-          #     "enableNetworkPolicy": "true",
-          #     "nodeAgent": {
-          #         "healthProbeBindAddr": "8163",
-          #         "metricsBindAddr": "8162"
-          #     }
-          #   })
+           configuration_values = jsonencode({
+              env ={
+                  AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG: "false",
+                  ENABLE_PREFIX_DELEGATION : "false",
+                  WARM_ENI_TARGET : "1"
+                  
+              }
+              # "enableNetworkPolicy": "true",
+              # "nodeAgent": {
+              #     "healthProbeBindAddr": "8163",
+              #     "metricsBindAddr": "8162"
+              # }
+            })
         }
 
         # aws-ebs-csi-driver ={
@@ -272,50 +281,133 @@ module "eks" {
   #   # }
 
   # }
-
+  
+  
   eks_managed_node_groups  = {
   //local.eks_managed_ng
 
     spot0 = {
+        kubernetes_version = var.cluster_version
+        force_update_version = true
+        create_launch_template = true
         name = "spot0"
         min_size = 1
         max_size = 3
-        desired_size = 1
+        desired_size = 2
         capacity_type = "SPOT"
-        instance_types = ["t3.small"]
-        ami_type = "AL2_x86_64"
-        use_latest_ami_release_version = false
+        instance_types = ["t3.medium"]
+        # release_version = "1.31.13-20260129"
+        # ami_type = "AL2_x86_64"
+        # ami_type = "AL2023_x86_64_STANDARD"
+
+        use_latest_ami_release_version = true
+        metadata_options = {
+          http_put_response_hop_limit = 2   # AWS load balancer controller requirement
+        }
+        pre_bootstrap_user_data = <<-EOT
+          #!/bin/bash
+          # To enable session manager
+          sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          sudo systemctl enable amazon-ssm-agent
+          sudo systemctl start amazon-ssm-agent
+          EOT
+
 
         labels = {
-          "colocho/GroupNode" = "spot0"
-          "colocho/instanceType"    = "t3.small"
+          "colocho.tv/service-dedicated-group" = "istio"
+          "colocho.tv/node-group"            = "storage_1"
+          "colocho.tv/instance-compute-type"   = true
+          "colocho.tv/lifecycle" = "spot"
         }
-        tags = {
-          "kubernetes.io/cluster/${local.name}" = "owned"
-          "k8s.io/cluster-autoscaler/${local.name}" = "owned"
-          "k8s.io/cluster-autoscaler/enabled" = "true"
-        }        
+
+        timeouts = {
+          create = "60m"
+          update = "360m"
+          delete = "60m"
+        }
+
+        update_config = {
+          max_unavailable_percentage = 10
+        }
+
+        launch_template_tags = {
+          "Name" = "${local.name}-spot0-eks-node-group"
+          "eks:cluster-name" = "${local.name}"
+          "eks:nodegroup-name" = "owned"
+        }
+        # tags = {
+        #   "kubernetes.io/cluster/${local.name}" = "owned"
+        #   "k8s.io/cluster-autoscaler/${local.name}" = "owned"
+        #   "k8s.io/cluster-autoscaler/enabled" = "true"
+        # }        
     }
 
-    # spot2 = {
-    #     min_size = 1
-    #     max_size = 2
-    #     desired_size = 1
-    #     capacity_type = "SPOT"
-    #     labels = {
-    #       "colocho/service" = "servicea"
-    #       "colocho/type"    = "compute_1"
-    #       "type"
-    #     }
+    
+  # }
 
-    #     taints = [
-    #       {
-    #         key   = "dedicated"
-    #         value = "gpuGroup"
-    #         effect = "NO_SCHEDULE"
-    #       }
-    #     ]
+    # eks_managed_node_groups = {
+    #   for key, base_config in var.base_node_groups :
+    #    key => merge(
+    #     base_config,
+    #     contains(keys(var.node_group_overrides), key) ? var.node_group_overrides[key] 
+    #     # {
+    #     #   # Override or add additional settings here
+    #     #   desired_size = try(var.node_group_overrides[key].desired_size, base_config.desired_size) 
+    #     #   min_size     = try(var.node_group_overrides[key].min_size, base_config.min_size)
+    #     #   max_size     = try(var.node_group_overrides[key].max_size, base_config.max)
+    #     #   ami_id       = try(var.node_group_overrides[key].ami_id, base_config.ami_id)
+    #     #   ami_type    = try(var.node_group_overrides[key].ami_type, base_config.ami_type)
+    #     #   ami_release_version = try(var.node_group_overrides[key].ami_release_version, base_config.ami_release_version)
+    #     #   instance_types = try(var.node_group_overrides[key].instance_types, base_config.instance_types)
+
+    #     #   update_config = try(var.node_group_overrides[key].update_config, base_config.update_config)
+    #     #   labels   = try(var.node_group_overrides[key].labels, base_config.labels)
+
+
+    #     # }
+    #      : {}
+    #    )
     # }
+
+
+
+
+
+    spot2 = {
+        kubernetes_version = var.cluster_version
+        force_update_version = true
+        create_launch_template = true
+        name = "spot2"      
+        min_size = 1
+        max_size = 2
+        desired_size = 1
+        # capacity_type = "
+        instance_types = ["t3.small"]
+        ami_type = "AL2_x86_64"
+        labels = {
+          "colocho/service" = "servicea"
+          "colocho/type"    = "compute_1"
+          
+        }
+
+        pre_bootstrap_user_data = <<-EOT
+          #!/bin/bash
+          # To enable session manager
+          sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          sudo systemctl enable amazon-ssm-agent
+          sudo systemctl start amazon-ssm-agent
+          EOT
+
+        # taints = [
+        #   {
+        #     key   = "dedicated"
+        #     value = "gpuGroup"
+        #     effect = "NO_SCHEDULE"
+        #   }
+        # ]
+    }
+
+  }
     # spot = {
         # pre_bootstrap_user_data = <<-EOT
         # #!/bin/bash
@@ -459,8 +551,6 @@ module "eks" {
 
 
   # #  aws_auth_roles = var.map_roles_aws
-
-   }
 
 
 }

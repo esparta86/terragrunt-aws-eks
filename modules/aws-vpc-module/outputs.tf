@@ -42,6 +42,11 @@ output "cluster_oidc_issuer_url" {
   
 }
 
+output "cluster_dualstack_oidc_issuer_url" {
+  value = try(module.eks[0].cluster_dualstack_oidc_issuer_url,"no-eks-cluster-oidc-issuer-url")
+  
+}
+
 output "cluster_ca_certificate" {
   value = try(module.eks[0].cluster_certificate_authority_data,"no-eks-cluster-ca-certificate")
 }
@@ -57,4 +62,9 @@ output "private_subnets" {
 
 output "public_subnets" {
   value = module.vpc.public_subnets
+}
+
+
+output "manage_nde_groups" {
+  value = module.eks[0].eks_managed_node_groups
 }

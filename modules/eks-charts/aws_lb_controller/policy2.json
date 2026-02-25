@@ -1,0 +1,28 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "elasticloadbalancing:DescribeTargetHealth",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeInstances",
+                "ec2:AuthorizeSecurityGroupIngress"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:ModifyTargetGroupAttributes",
+                "elasticloadbalancing:ModifyTargetGroup",
+                "elasticloadbalancing:DeregisterTargets"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
+        }
+    ],
+    "Version": "2012-10-17"
+}

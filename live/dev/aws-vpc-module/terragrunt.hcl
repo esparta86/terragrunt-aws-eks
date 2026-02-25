@@ -39,9 +39,9 @@ inputs = {
   aws_account_id            = include.eks.locals.aws_account_id
   vpc_name                  = "main-colocho"
   vpc_cidr                  = "10.0.0.0/16"
-  enable_compute_ng_default = false
+  enable_compute_ng_default = true
 
-  cluster_version = "1.28"
+  cluster_version = "1.29"
   create_eks      = true
 
   enable_ebs_csi_driver = true
@@ -69,7 +69,7 @@ inputs = {
     #   groups = ["system:bootstrappers","system:nodes"]
     # }
   ]
-  eks_endpoint_public_cidrs = ["179.5.94.197/32"]
+  eks_endpoint_public_cidrs = ["190.62.85.1/32","64.226.130.250/32","190.57.85.188/32"]
 
 
 
@@ -149,27 +149,42 @@ inputs = {
   #   header_items = ["example"]
   # }
 
-   node-group-custom-types = {
-      storage_1 = {
-        name           = "storage_1"
-        min_size       = 2
-        max_size       = 4
-        desired_size   = 2
-        instance_types = ["t3.small"]
-        labels = {
-          "marte.tv/instance-storage-type" = true
-          "marte.tv/node-group"            = "storage_1"
-        }
-        taints = {
-          # storage_1 = {
-          #   key    = "marte.tv/node-group"
-          #   value  = "storage_1"
-          #   effect = "NO_SCHEDULE"
-          # }
-        }
-        # metadata_options = local.metadata_options
-      }
-    }
+  #  node-group-custom-types = {
+  #     storage_1 = {
+  #       name           = "storage_1"
+  #       min_size       = 2
+  #       max_size       = 4
+  #       desired_size   = 2
+  #       instance_types = ["c5.xlarge"]
+  #       labels = {
+  #         "colocho.tv/service-dedicated-group" = "istio"
+  #         "colocho.tv/node-group"            = "storage_1"
+  #         "colocho.tv/instance-compute-type"   = true
+  #       }
+  #       taints = {
+  #         # storage_1 = {
+  #         #   key    = "marte.tv/node-group"
+  #         #   value  = "storage_1"
+  #         #   effect = "NO_SCHEDULE"
+  #         # }
+  #       }
+  #       # metadata_options = local.metadata_options
+  #     }
+  #   }
+
+    # node_group_overrides = {
+    #   compute_1 = {
+    #     desired_size = 2
+    #     # instance_types = ["t3.medium","t3.small"] 
+    #   }
+    #   memory_1 = {
+    #     min_size = 1
+    #     # instance_types = ["t3.medium","t3.small"] 
+    #     update_config = {
+    #        max_unavailable_percentage = 10
+    #      }
+    #   }
+    # }
 
 
 }

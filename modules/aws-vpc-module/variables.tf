@@ -18,9 +18,11 @@ variable "azs" {
   description = "The availability zones to spread nodes in"
   default = [
     "us-east-1a",
-    # "us-east-1b",
-    "us-east-1c"
-    ]
+    "us-east-1b",
+    "us-east-1c",
+    # "us-east-1e",
+    "us-east-1f"
+  ]
   type = list(string)
 }
 
@@ -48,14 +50,14 @@ variable "worker_default_instance" {
   default = [
     # "c5n.2xlarge"
     "t3.small",
-    ]
+  ]
   type = list(string)
 }
 
 variable "cluster_version" {
   type        = string
   description = "Kubernetes cluster version"
-  default     = "1.30"
+  default     = "1.31"
 }
 
 variable "create_db_cluster_parameter_group" {
@@ -67,13 +69,13 @@ variable "create_db_cluster_parameter_group" {
 variable "db_cluster_parameter_group_parameters" {
   description = "A list of DB cluster parameters to apply. Note that parameters may differ from a family to an other"
   type        = list(map(string))
-  default     =  [{
-  "name"  : "work_mem"
-  "value" : 655360
-  },
-  {
-    "name"  : "work_mem2"
-    "value" : 334444}
+  default = [{
+    "name" : "work_mem"
+    "value" : 655360
+    },
+    {
+      "name" : "work_mem2"
+    "value" : 334444 }
   ]
 }
 
@@ -82,82 +84,227 @@ variable "max_size_primary" {
 }
 
 variable "enable_compute_ng_default" {
- type = bool
- default = true
+  type    = bool
+  default = true
 }
 
-variable "list_manage_compute_ng_default" {
-  type = map(any)
+# locals {
+#   base_node_groups = {
+#     compute_1 = {
+#       min_size     = 0
+#       max_size     = 2
+#       desired_size = 0
+#       update_config = {
+#         max_unavailable_percentage = 10
+#       }
+#       instance_types        = ["t3.small"]
+#       create_security_group = true
+#       iam_role_additional_policies = {
+#         "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+#       }
+#       block_device_mappings = {
+#         xvda = {
+#           device_name = "/dev/xvda"
+#           ebs = {
+#             volume_size           = 100
+#             volume_type           = "gp3"
+#             iops                  = 3000
+#             throughput            = 150
+#             encrypted             = false
+#             delete_on_termination = true
+#           }
+#         }
+#       }
+#       labels = {
+#         "colocho86/instance-compute-type" = true
+#         "colocho86/node-group"            = "compute_1"
+#       }
+#     }
+
+#     memory_1 = {
+#       min_size     = 0
+#       max_size     = 2
+#       desired_size = 0
+#       update_config = {
+#         max_unavailable_percentage = 10
+#       }
+#       instance_types        = ["t3.small"]
+#       create_security_group = false
+#       iam_role_additional_policies = {
+#         "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+#       }
+#       block_device_mappings = {
+#         xvda = {
+#           device_name = "/dev/xvda"
+#           ebs = {
+#             volume_size           = 100
+#             volume_type           = "gp3"
+#             iops                  = 3000
+#             throughput            = 150
+#             encrypted             = false
+#             delete_on_termination = true
+#           }
+#         }
+#       }
+#       labels = {
+#         "colocho86/instance-memory-type" = true
+#         "colocho86/node-group"           = "memory_1"
+#       }
+#     }
+
+
+#   }
+# }
+
+# variable "node_group_overrides" {
+#   description = "A map of node group overrides to customize node groups"
+#   type        = map(any)
+#   default     = {}
+# }
+
+variable "node_group_overrides" {
+  description = "Map of EKS managed node group definitions to create"
+  type = map(object({
+    min_size                       = optional(number)
+    max_size                       = optional(number)
+    desired_size                   = optional(number)
+    ami_id                         = optional(string)
+    ami_type                       = optional(string)
+    ami_release_version            = optional(string)
+    instance_types                 = optional(list(string))
+    labels                         = optional(map(string))
+    update_config = optional(object({
+      max_unavailable            = optional(number)
+      max_unavailable_percentage = optional(number)
+    }))
+    block_device_mappings = optional(map(object({
+      device_name = optional(string)
+      ebs = optional(object({
+        delete_on_termination      = optional(bool)
+        encrypted                  = optional(bool)
+        iops                       = optional(number)
+        kms_key_id                 = optional(string)
+        snapshot_id                = optional(string)
+        throughput                 = optional(number)
+        volume_initialization_rate = optional(number)
+        volume_size                = optional(number)
+        volume_type                = optional(string)
+      }))
+      no_device    = optional(string)
+      virtual_name = optional(string)
+    })))
+    iam_role_additional_policies  = optional(map(string))
+    # Security group
+    create_security_group                 = optional(bool)
+  }))
+  default = {}
+}
+
+variable "base_node_groups" {
+  description = "Map of EKS managed node group definitions to create"
+  type = map(object({
+    min_size                       = optional(number)
+    max_size                       = optional(number)
+    desired_size                   = optional(number)
+    ami_id                         = optional(string)
+    ami_type                       = optional(string)
+    ami_release_version            = optional(string)
+    instance_types                 = optional(list(string))
+    labels                         = optional(map(string))
+    update_config = optional(object({
+      max_unavailable            = optional(number)
+      max_unavailable_percentage = optional(number)
+    }))
+    block_device_mappings = optional(map(object({
+      device_name = optional(string)
+      ebs = optional(object({
+        delete_on_termination      = optional(bool)
+        encrypted                  = optional(bool)
+        iops                       = optional(number)
+        kms_key_id                 = optional(string)
+        snapshot_id                = optional(string)
+        throughput                 = optional(number)
+        volume_initialization_rate = optional(number)
+        volume_size                = optional(number)
+        volume_type                = optional(string)
+      }))
+      no_device    = optional(string)
+      virtual_name = optional(string)
+    })))
+    iam_role_additional_policies  = optional(map(string))
+    # Security group
+    create_security_group                 = optional(bool)
+  }))
   default = {
-      # compute_1 = {
-      #     min_size     = 1
-      #     max_size     = 4
-      #     desired_size = 1
-      #     update_config = {
-      #       max_unavailable_percentage = 10
-      #     }
-      #     instance_types               = ["c5.4xlarge"]
-      #     block_device_mappings = {
-      #       xvda = {
-      #         device_name = "/dev/xvda"
-      #         ebs = {
-      #           volume_size           = 100
-      #           volume_type           = "gp3"
-      #           iops                  = 3000
-      #           throughput            = 150
-      #           encrypted             = false
-      #           delete_on_termination = true
-      #         }
-      #       }
-      #     }
-      #     labels = {
-      #       "colocho86/service-dedicated-group" = "istio"
-      #       "colocho86/instance-compute-type"   = true
-      #       "colocho86/node-group"              = "compute_1"
-      #     }
-      #   }
+    compute_1 = {
+      min_size     = 0
+      max_size     = 2
+      desired_size = 0
+      update_config = {
+        max_unavailable_percentage = 10
+      }
+      instance_types        = ["t3.small"]
+      create_security_group = true
+      iam_role_additional_policies = {
+        "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 100
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 150
+            encrypted             = false
+            delete_on_termination = true
+          }
+        }
+      }
+      labels = {
+        "colocho86/instance-compute-type" = true
+        "colocho86/node-group"            = "compute_1"
+      }
+    }
 
-      #  compute_2 = {
-      #       min_size     = 0
-      #       max_size     = 2
-      #       desired_size = 0
-      #       update_config = {
-      #         max_unavailable_percentage = 10
-      #       }
-      #       instance_types               = ["c5.9xlarge"]
-      #       block_device_mappings = {
-      #         xvda = {
-      #           device_name = "/dev/xvda"
-      #           ebs = {
-      #             volume_size           = 100
-      #             volume_type           = "gp3"
-      #             iops                  = 3000
-      #             throughput            = 150
-      #             encrypted             = false
-      #             delete_on_termination = true
-      #           }
-      #         }
-      #       }
-      #       labels = {
-      #         "colocho86/instance-compute-type" = true
-      #         "colocho86/node-group"            = "compute_2"
-
-      #       }
-      #       # taints = [
-      #       #   {
-      #       #     key    = "instance-dedicated"
-      #       #     value  = "9xl"
-      #       #     effect = "NO_SCHEDULE"
-      #       #   }
-      #       # ]
-      #     }
+    memory_1 = {
+      min_size     = 0
+      max_size     = 2
+      desired_size = 0
+      update_config = {
+        max_unavailable_percentage = 10
+      }
+      instance_types        = ["t3.small"]
+      create_security_group = false
+      iam_role_additional_policies = {
+        "AmazonEBSCSIDriverPolicy" = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 100
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 150
+            encrypted             = false
+            delete_on_termination = true
+          }
+        }
+      }
+      labels = {
+        "colocho86/instance-memory-type" = true
+        "colocho86/node-group"           = "memory_1"
+      }
+    }
   }
+
 }
 
 
 variable "map_roles_aws" {
   description = "Additional IAM roles to add to the aws-auth configmap."
-  type = list(any)
+  type        = list(any)
   # type = list(object({
   #   rolearn  = string
   #   username = string
@@ -177,25 +324,25 @@ variable "eks_timeout" {
   type = map(string)
   default = {
     "create" = "30m"
-    "update" = "30m"
-    "delete" = "30m"
+    "update" = "60m"
+    "delete" = "15m"
   }
 }
 
 
 variable "eks_endpoint_public_cidrs" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "list_ebs_csi_roles" {
-  type = list(string)
-  default = [ "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" ]
+  type    = list(string)
+  default = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
 }
 
 variable "list_efs_csi_roles" {
-  type = list(string)
-  default = [ "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy" ]
+  type    = list(string)
+  default = ["arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"]
 }
 
 
@@ -270,17 +417,17 @@ variable "list_efs_csi_roles" {
 
 
 variable "istio_core_chart" {
-    type = string
-    default = "base"
+  type    = string
+  default = "base"
 }
 
 variable "istio_core_repository" {
-  type = string
+  type    = string
   default = "https://istio-release.storage.googleapis.com/charts"
 }
 
 variable "istio_core_version" {
-  type = string
+  type    = string
   default = "1.20.7"
 }
 

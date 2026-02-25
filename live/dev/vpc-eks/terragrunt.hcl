@@ -1,4 +1,7 @@
 
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
 
 terraform {
     source = "../../..//modules/vpc"
@@ -23,6 +26,7 @@ inputs = {
     required_second_vpc = false
     vpc_cidr2 = "10.3.0.0/16"
     required_nat_main_vpc = true
+    required_nat_second_vpc = false
     required_private_subnets = true
 
 
@@ -30,6 +34,6 @@ inputs = {
 }
 
 
-include {
-    path = find_in_parent_folders()
-}
+# include {
+#     path = find_in_parent_folders()
+# }
